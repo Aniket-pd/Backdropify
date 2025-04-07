@@ -11,7 +11,7 @@ import SwiftUI
 struct BackdropifyApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            homeView()
         }
     }
 }

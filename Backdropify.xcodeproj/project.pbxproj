@@ -6,14 +6,29 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		E28AB2952DA0876E0039D703 /* BackdropifyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E28AB2942DA0876E0039D703 /* BackdropifyApp.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
-		E28AB2912DA0876E0039D703 /* Backdropify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Backdropify.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E28AB2912DA0876E0039D703 /* Backdropify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = Backdropify.app; path = "/Users/aniket/Documents/Code projects Xcode/Backdropify/build/Debug-iphoneos/Backdropify.app"; sourceTree = "<absolute>"; };
+		E28AB2942DA0876E0039D703 /* BackdropifyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackdropifyApp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		E28AB2932DA0876E0039D703 /* Backdropify */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Backdropify;
+			sourceTree = "<group>";
+		};
+		E28AB2A72DA47DD00039D703 /* Models */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Models;
+			sourceTree = "<group>";
+		};
+		E28AB2AC2DA47E310039D703 /* Views */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -32,17 +47,19 @@
 		E28AB2882DA0876E0039D703 = {
 			isa = PBXGroup;
 			children = (
+				E28AB2AF2DA483070039D703 /* Services */,
 				E28AB2932DA0876E0039D703 /* Backdropify */,
-				E28AB2922DA0876E0039D703 /* Products */,
+				E28AB2A72DA47DD00039D703 /* Models */,
+				E28AB2AC2DA47E310039D703 /* Views */,
+				E28AB2942DA0876E0039D703 /* BackdropifyApp.swift */,
 			);
 			sourceTree = "<group>";
 		};
-		E28AB2922DA0876E0039D703 /* Products */ = {
+		E28AB2AF2DA483070039D703 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				E28AB2912DA0876E0039D703 /* Backdropify.app */,
 			);
-			name = Products;
+			path = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -62,6 +79,8 @@
 			);
 			fileSystemSynchronizedGroups = (
 				E28AB2932DA0876E0039D703 /* Backdropify */,
+				E28AB2A72DA47DD00039D703 /* Models */,
+				E28AB2AC2DA47E310039D703 /* Views */,
 			);
 			name = Backdropify;
 			packageProductDependencies = (
@@ -95,7 +114,7 @@
 			mainGroup = E28AB2882DA0876E0039D703;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = E28AB2922DA0876E0039D703 /* Products */;
+			productRefGroup = E28AB2882DA0876E0039D703;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -119,6 +138,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E28AB2952DA0876E0039D703 /* BackdropifyApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

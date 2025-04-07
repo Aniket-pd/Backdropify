@@ -8,11 +8,17 @@
 
 /* Begin PBXBuildFile section */
 		E28AB2952DA0876E0039D703 /* BackdropifyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E28AB2942DA0876E0039D703 /* BackdropifyApp.swift */; };
+		E28AB2B22DA486BC0039D703 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E28AB2B12DA486BC0039D703 /* GoogleService-Info.plist */; };
+		E28AB2B52DA487B60039D703 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = E28AB2B42DA487B60039D703 /* FirebaseAnalytics */; };
+		E28AB2B72DA487B60039D703 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = E28AB2B62DA487B60039D703 /* FirebaseAuth */; };
+		E28AB2B92DA487B60039D703 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = E28AB2B82DA487B60039D703 /* FirebaseFirestore */; };
+		E28AB2BB2DA487B60039D703 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = E28AB2BA2DA487B60039D703 /* FirebaseStorage */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		E28AB2912DA0876E0039D703 /* Backdropify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = Backdropify.app; path = "/Users/aniket/Documents/Code projects Xcode/Backdropify/build/Debug-iphoneos/Backdropify.app"; sourceTree = "<absolute>"; };
 		E28AB2942DA0876E0039D703 /* BackdropifyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackdropifyApp.swift; sourceTree = "<group>"; };
+		E28AB2B02DA4863A0039D703 /* Backdropify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = Backdropify.app; path = "/Users/aniket/Documents/Code projects Xcode/Backdropify/build/Debug-iphoneos/Backdropify.app"; sourceTree = "<absolute>"; };
+		E28AB2B12DA486BC0039D703 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -38,6 +44,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E28AB2B52DA487B60039D703 /* FirebaseAnalytics in Frameworks */,
+				E28AB2BB2DA487B60039D703 /* FirebaseStorage in Frameworks */,
+				E28AB2B72DA487B60039D703 /* FirebaseAuth in Frameworks */,
+				E28AB2B92DA487B60039D703 /* FirebaseFirestore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -52,6 +62,7 @@
 				E28AB2A72DA47DD00039D703 /* Models */,
 				E28AB2AC2DA47E310039D703 /* Views */,
 				E28AB2942DA0876E0039D703 /* BackdropifyApp.swift */,
+				E28AB2B12DA486BC0039D703 /* GoogleService-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -84,9 +95,13 @@
 			);
 			name = Backdropify;
 			packageProductDependencies = (
+				E28AB2B42DA487B60039D703 /* FirebaseAnalytics */,
+				E28AB2B62DA487B60039D703 /* FirebaseAuth */,
+				E28AB2B82DA487B60039D703 /* FirebaseFirestore */,
+				E28AB2BA2DA487B60039D703 /* FirebaseStorage */,
 			);
 			productName = Backdropify;
-			productReference = E28AB2912DA0876E0039D703 /* Backdropify.app */;
+			productReference = E28AB2B02DA4863A0039D703 /* Backdropify.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -113,6 +128,9 @@
 			);
 			mainGroup = E28AB2882DA0876E0039D703;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				E28AB2B32DA487B60039D703 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = E28AB2882DA0876E0039D703;
 			projectDirPath = "";
@@ -128,6 +146,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E28AB2B22DA486BC0039D703 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -285,7 +304,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = aniket.Backdropify;
+				PRODUCT_BUNDLE_IDENTIFIER = aniket.walli;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -314,7 +333,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = aniket.Backdropify;
+				PRODUCT_BUNDLE_IDENTIFIER = aniket.walli;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -344,6 +363,40 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		E28AB2B32DA487B60039D703 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.11.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E28AB2B42DA487B60039D703 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E28AB2B32DA487B60039D703 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		E28AB2B62DA487B60039D703 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E28AB2B32DA487B60039D703 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		E28AB2B82DA487B60039D703 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E28AB2B32DA487B60039D703 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		E28AB2BA2DA487B60039D703 /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E28AB2B32DA487B60039D703 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = E28AB2892DA0876E0039D703 /* Project object */;
 }

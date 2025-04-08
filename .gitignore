@@ -1,3 +1,11 @@
+# Firebase secret key
+GoogleService-Info.plist
+
+# Optional: other common files to ignore
+*.xcuserdata
+*.xcuserstate
+.DS_Store
+
 # ============ macOS SYSTEM FILES ============
 .DS_Store
 .AppleDouble

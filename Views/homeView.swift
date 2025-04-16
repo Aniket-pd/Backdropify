@@ -5,10 +5,13 @@ struct HomeView: View {
         
         ScrollView{
             ZStack{
-                Rectangle()
-                    .fill(Color.red)
-                    .frame(height: 586)
-                    .ignoresSafeArea(.all)
+                Image("Afuturisticneonlitstreeta_18295513")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .clipped()
+                  
+                
+                
             }
         }
         .ignoresSafeArea()

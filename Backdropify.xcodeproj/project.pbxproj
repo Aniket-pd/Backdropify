@@ -13,12 +13,14 @@
 		E28AB2B72DA487B60039D703 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = E28AB2B62DA487B60039D703 /* FirebaseAuth */; };
 		E28AB2B92DA487B60039D703 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = E28AB2B82DA487B60039D703 /* FirebaseFirestore */; };
 		E28AB2BB2DA487B60039D703 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = E28AB2BA2DA487B60039D703 /* FirebaseStorage */; };
+		E28AB2D72DA641850039D703 /* WallpaperViewModel 2.swift in Sources */ = {isa = PBXBuildFile; fileRef = E28AB2D42DA641850039D703 /* WallpaperViewModel 2.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		E28AB2942DA0876E0039D703 /* BackdropifyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackdropifyApp.swift; sourceTree = "<group>"; };
-		E28AB2B02DA4863A0039D703 /* Backdropify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = Backdropify.app; path = "/Users/aniket/Documents/Code projects Xcode/Backdropify/build/Debug-iphoneos/Backdropify.app"; sourceTree = "<absolute>"; };
 		E28AB2B12DA486BC0039D703 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		E28AB2CC2DA641850039D703 /* Backdropify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Backdropify.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E28AB2D42DA641850039D703 /* WallpaperViewModel 2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WallpaperViewModel 2.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -63,12 +65,14 @@
 				E28AB2AC2DA47E310039D703 /* Views */,
 				E28AB2942DA0876E0039D703 /* BackdropifyApp.swift */,
 				E28AB2B12DA486BC0039D703 /* GoogleService-Info.plist */,
+				E28AB2CC2DA641850039D703 /* Backdropify.app */,
 			);
 			sourceTree = "<group>";
 		};
 		E28AB2AF2DA483070039D703 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				E28AB2D42DA641850039D703 /* WallpaperViewModel 2.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -101,7 +105,7 @@
 				E28AB2BA2DA487B60039D703 /* FirebaseStorage */,
 			);
 			productName = Backdropify;
-			productReference = E28AB2B02DA4863A0039D703 /* Backdropify.app */;
+			productReference = E28AB2CC2DA641850039D703 /* Backdropify.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -158,6 +162,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E28AB2952DA0876E0039D703 /* BackdropifyApp.swift in Sources */,
+				E28AB2D72DA641850039D703 /* WallpaperViewModel 2.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

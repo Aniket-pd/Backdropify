@@ -14,8 +14,28 @@ struct BackdropifyApp: App {
     }
     
     var body: some Scene {
-        WindowGroup {
-            homeView()
+        WindowGroup{
+            TabView {
+                HomeView()
+                    .tabItem {
+                        Image(systemName: "house")
+                    }
+
+                FavoritesView()
+                    .tabItem {
+                        Image(systemName: "heart")
+                    }
+
+                CoinStoreView()
+                    .tabItem {
+                        Image(systemName: "creditcard")
+                    }
+
+                ProfileView()
+                    .tabItem {
+                        Image(systemName: "person.crop.circle")
+                    }
+            }
         }
     }
 }

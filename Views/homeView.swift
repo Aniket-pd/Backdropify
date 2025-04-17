@@ -21,7 +21,7 @@ struct HomeView: View {
                         .tag(index)
                 }
             }
-            .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.69) // 30% of screen height
+            .modifier(StretchyHeaderViewModifier(startingHeight: UIScreen.main.bounds.height * 0.69))
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .always))
             .onReceive(timer) { _ in
                 withAnimation {

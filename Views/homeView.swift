@@ -40,6 +40,8 @@ struct HomeView: View {
                     )
                     .frame(height: UIScreen.main.bounds.height * 0.25)
                     .offset(y: -UIScreen.main.bounds.height * 0.25)
+                    .allowsHitTesting(false)
+                
             }
             
                 

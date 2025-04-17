@@ -9,56 +9,68 @@ struct HomeView: View {
         "photographyportraitofcontr_64338086 (1)"
         
     ]
+    private let collectionImages = [
+        "Nature",
+        "abstract art",
+        "anime"
+        
+    ]
     
     var body: some View {
         ScrollView {
-            TabView(selection: $currentIndex) {
-                ForEach(0..<imageNames.count, id: \.self) { index in
-                    Image(imageNames[index])
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .clipped()
-                        .tag(index)
+            ZStack(alignment: .bottom) {
+                TabView(selection: $currentIndex) {
+                    ForEach(0..<imageNames.count, id: \.self) { index in
+                        Image(imageNames[index])
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .clipped()
+                            .tag(index)
+                    }
                 }
-            }
-            .modifier(StretchyHeaderViewModifier(startingHeight: UIScreen.main.bounds.height * 0.69))
-            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .always))
-            .onReceive(timer) { _ in
-                withAnimation {
-                    currentIndex = (currentIndex + 1) % imageNames.count
+                .modifier(StretchyHeaderViewModifier(startingHeight: UIScreen.main.bounds.height * 0.69))
+                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .always))
+                .onReceive(timer) { _ in
+                    withAnimation {
+                        currentIndex = (currentIndex + 1) % imageNames.count
+                    }
                 }
+                
+                Rectangle()
+                    .fill(
+                        LinearGradient(
+                            gradient: Gradient(colors: [Color.black.opacity(0), Color.black.opacity(0.5),
+                                                        Color.black.opacity(1)]),
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
+                    .frame(height: 150)
+                    .offset(y: 10)
+                    .allowsHitTesting(false)
             }
             
             Text("Collection")
                 .font(.system(size: 20, weight: .semibold, design: .default))
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.leading, 20)
+                .padding(.leading)
                 .padding(.top, 10)
             
-            
-            ZStack {
-                Rectangle()
-                    .fill(
-                        LinearGradient(
-                            gradient: Gradient(colors: [Color.white.opacity(0), Color.white.opacity(0)]),
-                            startPoint: .top,
-                            endPoint: .bottom
-                        )
-                        .opacity(0.9)
-                    )
-                    .frame(height: UIScreen.main.bounds.height * 0.25)
-                    .offset(y: -UIScreen.main.bounds.height * 0.33)
-                    .allowsHitTesting(false)
-                
+            LazyVStack(spacing: 30) {
+                ForEach(0..<collectionImages.count, id: \.self) { index in
+                    Image(collectionImages[index])
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(height: 193)
+                        .clipped()
+                        .cornerRadius(20)
+                        .padding(.horizontal)
+                }
             }
-            VStack{
-                Rectangle()
-                    .fill(Color.white)
-                    .frame(width: 233,height: 344)
-            }
+            .padding(.top, 10)
             
-                
+            
             
         }
         .ignoresSafeArea()

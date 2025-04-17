@@ -5,7 +5,7 @@ struct HomeView: View {
     private let timer = Timer.publish(every: 5, on: .main, in: .common).autoconnect()
     private let imageNames = [
         "Afuturisticneonlitstreeta_18295513",
-        "Asmoothverticalgradientwit_6700173",
+        "Naturescenelandscapeview_88300727",
         "photographyportraitofcontr_64338086 (1)"
         
     ]
@@ -28,20 +28,34 @@ struct HomeView: View {
                     currentIndex = (currentIndex + 1) % imageNames.count
                 }
             }
+            
+            Text("Collection")
+                .font(.system(size: 20, weight: .semibold, design: .default))
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.leading, 20)
+                .padding(.top, 10)
+            
+            
             ZStack {
                 Rectangle()
                     .fill(
                         LinearGradient(
-                            gradient: Gradient(colors: [Color.black.opacity(0), Color.black.opacity(1)]),
+                            gradient: Gradient(colors: [Color.white.opacity(0), Color.white.opacity(0)]),
                             startPoint: .top,
                             endPoint: .bottom
                         )
                         .opacity(0.9)
                     )
                     .frame(height: UIScreen.main.bounds.height * 0.25)
-                    .offset(y: -UIScreen.main.bounds.height * 0.25)
+                    .offset(y: -UIScreen.main.bounds.height * 0.33)
                     .allowsHitTesting(false)
                 
+            }
+            VStack{
+                Rectangle()
+                    .fill(Color.white)
+                    .frame(width: 233,height: 344)
             }
             
                 

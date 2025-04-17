@@ -5,6 +5,8 @@ struct HomeView: View {
     private let timer = Timer.publish(every: 5, on: .main, in: .common).autoconnect()
     private let imageNames = [
         "Afuturisticneonlitstreeta_18295513",
+        "Asmoothverticalgradientwit_6700173",
+        "photographyportraitofcontr_64338086 (1)"
         
     ]
     
@@ -26,6 +28,22 @@ struct HomeView: View {
                     currentIndex = (currentIndex + 1) % imageNames.count
                 }
             }
+            ZStack {
+                Rectangle()
+                    .fill(
+                        LinearGradient(
+                            gradient: Gradient(colors: [Color.black.opacity(0), Color.black.opacity(1)]),
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                        .opacity(0.9)
+                    )
+                    .frame(height: UIScreen.main.bounds.height * 0.25)
+                    .offset(y: -UIScreen.main.bounds.height * 0.25)
+            }
+            
+                
+            
         }
         .ignoresSafeArea()
     }
@@ -33,4 +51,5 @@ struct HomeView: View {
 
 #Preview {
     HomeView()
+        .background(Color.black)
 }

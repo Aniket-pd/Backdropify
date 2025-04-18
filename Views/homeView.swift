@@ -17,7 +17,8 @@ struct HomeView: View {
     ]
     
     var body: some View {
-        ScrollView {
+        NavigationView {
+            ScrollView {
             ZStack(alignment: .bottom) {
                 TabView(selection: $currentIndex) {
                     ForEach(0..<imageNames.count, id: \.self) { index in
@@ -62,7 +63,7 @@ struct HomeView: View {
                     Image(collectionImages[index])
                         .resizable()
                         .aspectRatio(contentMode: .fill)
-                        .frame(height: 193)
+                        .frame(height: 200)
                         .clipped()
                         .cornerRadius(20)
                         .padding(.horizontal)
@@ -72,12 +73,24 @@ struct HomeView: View {
             
             
             
+            }
+            .background(Color.black)
+            .ignoresSafeArea()
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(action: {
+                        // Action for side menu icon
+                    }) {
+                        Image(systemName: "line.3.horizontal")
+                            .foregroundColor(.white)
+                    }
+                }
+            }
         }
-        .ignoresSafeArea()
+        .background(Color.black)
     }
 }
 
 #Preview {
     HomeView()
-        .background(Color.black)
 }

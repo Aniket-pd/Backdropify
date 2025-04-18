@@ -78,12 +78,10 @@ struct HomeView: View {
             .ignoresSafeArea()
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: {
-                        // Action for side menu icon
-                    }) {
-                        Image(systemName: "line.3.horizontal")
-                            .foregroundColor(.white)
-                    }
+                    Image("backdropify")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 130, height: 24) // Adjust size as needed
                 }
             }
         }

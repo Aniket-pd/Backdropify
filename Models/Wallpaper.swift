@@ -12,12 +12,21 @@
  •    Each property (id, name, url, price, category, likes) matches the fields you’ll create in Firestore.
  */
 import Foundation
+import FirebaseFirestore
 
 struct Wallpaper: Identifiable, Codable {
     var id: String
     var name: String
     var url: String
-    var price: Double
-    var category: String
-    var likes: Int
+    var price: Double?      //optional
+    var category: String?   //optional
+    var likes: Int?         //optional
+}
+
+
+
+struct UIWallpaper: Identifiable, Codable {
+    @DocumentID var id: String?
+    var name: String
+    var url: String
 }

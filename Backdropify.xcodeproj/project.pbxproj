@@ -14,6 +14,7 @@
 		E28AB2B92DA487B60039D703 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = E28AB2B82DA487B60039D703 /* FirebaseFirestore */; };
 		E28AB2BB2DA487B60039D703 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = E28AB2BA2DA487B60039D703 /* FirebaseStorage */; };
 		E28AB2D72DA641850039D703 /* WallpaperViewModel 2.swift in Sources */ = {isa = PBXBuildFile; fileRef = E28AB2D42DA641850039D703 /* WallpaperViewModel 2.swift */; };
+		E2E68AC42DB3B46500EC4B2A /* uiWallpaperViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E68AC32DB3B45000EC4B2A /* uiWallpaperViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,6 +22,7 @@
 		E28AB2B12DA486BC0039D703 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E28AB2CC2DA641850039D703 /* Backdropify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Backdropify.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E28AB2D42DA641850039D703 /* WallpaperViewModel 2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WallpaperViewModel 2.swift"; sourceTree = "<group>"; };
+		E2E68AC32DB3B45000EC4B2A /* uiWallpaperViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = uiWallpaperViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -72,6 +74,7 @@
 		E28AB2AF2DA483070039D703 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				E2E68AC32DB3B45000EC4B2A /* uiWallpaperViewModel.swift */,
 				E28AB2D42DA641850039D703 /* WallpaperViewModel 2.swift */,
 			);
 			path = Services;
@@ -162,6 +165,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E28AB2952DA0876E0039D703 /* BackdropifyApp.swift in Sources */,
+				E2E68AC42DB3B46500EC4B2A /* uiWallpaperViewModel.swift in Sources */,
 				E28AB2D72DA641850039D703 /* WallpaperViewModel 2.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

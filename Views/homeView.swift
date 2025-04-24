@@ -79,17 +79,19 @@ struct HomeView: View {
             
             LazyVStack(spacing: 30) {
                 ForEach(collectionsVM.collections) { collection in
-                    AsyncImage(url: URL(string: collection.url)) { image in
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                    } placeholder: {
-                        ProgressView()
+                    NavigationLink(destination: CollectionDetailView(collection: collection)) {
+                        AsyncImage(url: URL(string: collection.url)) { image in
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                        } placeholder: {
+                            ProgressView()
+                        }
+                        .frame(height: 200)
+                        .clipped()
+                        .cornerRadius(20)
+                        .padding(.horizontal)
                     }
-                    .frame(height: 200)
-                    .clipped()
-                    .cornerRadius(20)
-                    .padding(.horizontal)
                 }
             }
             .padding(.top, 10)

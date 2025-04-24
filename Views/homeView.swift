@@ -18,9 +18,15 @@ struct OffsetObservingView: View {
 }
 
 struct HomeView: View {
+    
     @State private var scrollOffset: CGFloat = 0
     @State private var currentIndex = 0
-    @StateObject private var uiWallpaperViewModel = UIWallpaperViewModel()
+    //--------------
+    @StateObject private var collectionsVM = WallpaperCollectionsViewModel()
+    @State private var selectedCollection: WallpaperCollection?
+    @State private var showCollection = false
+    
+    //----------------------
     private let timer = Timer.publish(every: 5, on: .main, in: .common).autoconnect()
     private let imageNames = [
         "Afuturisticneonlitstreeta_18295513",
@@ -72,8 +78,8 @@ struct HomeView: View {
                 .padding(.top, 10)
             
             LazyVStack(spacing: 30) {
-                ForEach(uiWallpaperViewModel.wallpapers) { wallpaper in
-                    AsyncImage(url: URL(string: wallpaper.url)) { image in
+                ForEach(collectionsVM.collections) { collection in
+                    AsyncImage(url: URL(string: collection.url)) { image in
                         image
                             .resizable()
                             .aspectRatio(contentMode: .fill)
@@ -90,7 +96,8 @@ struct HomeView: View {
             }
             .coordinateSpace(name: "scroll")
             .onAppear {
-                uiWallpaperViewModel.fetchUIWallpapers()
+            
+                collectionsVM.fetchCollections()
             }
             .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
                 withAnimation(.easeInOut(duration: 6)) {

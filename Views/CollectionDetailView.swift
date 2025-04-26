@@ -26,6 +26,22 @@ struct CollectionDetailView: View {
                         .clipped()
                         .cornerRadius(16)
                         
+                        // favorite button
+                        Button(action: {
+                            FavoritesManager.shared.toggleFavorite(wallpaper: wallpaper)
+                        }) {
+                            Image(systemName: FavoritesManager.shared.isFavorite(wallpaper: wallpaper) ? "heart.fill" : "heart")
+                                .resizable()
+                                .frame(width: 24, height: 24)
+                                .foregroundColor(.red)
+                                .padding(8)
+                                .background(Color.white)
+                                .clipShape(Circle())
+                                .shadow(radius: 3)
+                        }
+                        .padding(10)
+                        
+                        
                         Text("\(wallpaper.coin) Coins") // 3️⃣ Display the coin value if you want
                             .foregroundColor(.white)
                             .font(.caption)

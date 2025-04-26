@@ -16,6 +16,7 @@
 		E28AB2BB2DA487B60039D703 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = E28AB2BA2DA487B60039D703 /* FirebaseStorage */; };
 		E28AB2D72DA641850039D703 /* WallpaperViewModel 2.swift in Sources */ = {isa = PBXBuildFile; fileRef = E28AB2D42DA641850039D703 /* WallpaperViewModel 2.swift */; };
 		E2F628B32DBACFE00072B770 /* WallpapersByCollectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F628B22DBACFD70072B770 /* WallpapersByCollectionViewModel.swift */; };
+		E2F628DB2DBD6C190072B770 /* FavoritesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F628DA2DBD6C090072B770 /* FavoritesManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +26,7 @@
 		E28AB2CC2DA641850039D703 /* Backdropify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Backdropify.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E28AB2D42DA641850039D703 /* WallpaperViewModel 2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WallpaperViewModel 2.swift"; sourceTree = "<group>"; };
 		E2F628B22DBACFD70072B770 /* WallpapersByCollectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpapersByCollectionViewModel.swift; sourceTree = "<group>"; };
+		E2F628DA2DBD6C090072B770 /* FavoritesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -76,6 +78,7 @@
 		E28AB2AF2DA483070039D703 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				E2F628DA2DBD6C090072B770 /* FavoritesManager.swift */,
 				E2F628B22DBACFD70072B770 /* WallpapersByCollectionViewModel.swift */,
 				E22D37532DB8BE4D0000107F /* WallpaperCollectionsViewModel.swift */,
 				E28AB2D42DA641850039D703 /* WallpaperViewModel 2.swift */,
@@ -170,6 +173,7 @@
 				E28AB2952DA0876E0039D703 /* BackdropifyApp.swift in Sources */,
 				E22D37542DB8BE710000107F /* WallpaperCollectionsViewModel.swift in Sources */,
 				E2F628B32DBACFE00072B770 /* WallpapersByCollectionViewModel.swift in Sources */,
+				E2F628DB2DBD6C190072B770 /* FavoritesManager.swift in Sources */,
 				E28AB2D72DA641850039D703 /* WallpaperViewModel 2.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

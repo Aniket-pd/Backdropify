@@ -3,10 +3,16 @@ import SwiftUI
 struct CollectionDetailView: View {
     let collection: WallpaperCollection
     @StateObject private var viewModel = WallpapersByCollectionViewModel()
-
+    
+    // 1️⃣ Define the grid structure: 2 columns
+    private let columns = [
+        GridItem(.flexible()),
+        GridItem(.flexible())
+    ]
+    
     var body: some View {
         ScrollView {
-            LazyVStack(spacing: 20) {
+            LazyVGrid(columns: columns, spacing: 20) { // 2️⃣ Use LazyVGrid instead of LazyVStack
                 ForEach(viewModel.wallpapers) { wallpaper in
                     VStack(alignment: .leading, spacing: 8) {
                         AsyncImage(url: URL(string: wallpaper.url)) { image in
@@ -16,15 +22,20 @@ struct CollectionDetailView: View {
                         } placeholder: {
                             ProgressView()
                         }
-                        .frame(height: 200)
+                        .frame(height: 150) // 🎯 Slightly smaller for a nice grid look
                         .clipped()
                         .cornerRadius(16)
                         
-                        
+                        Text("\(wallpaper.coin) Coins") // 3️⃣ Display the coin value if you want
+                            .foregroundColor(.white)
+                            .font(.caption)
+                            .padding(.leading, 4)
                     }
-                    .padding(.horizontal)
+                    .background(Color.gray.opacity(0.2))
+                    .cornerRadius(16)
                 }
             }
+            .padding()
         }
         .navigationTitle(collection.name)
         .navigationBarTitleDisplayMode(.inline)

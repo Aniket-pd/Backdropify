@@ -10,4 +10,5 @@ struct WallpaperCollection: Identifiable {
     var id: String?            // Firestore document ID
     var name: String            // Display name (e.g., "Nature")
     var url: String    // Thumbnail image URL
+    
 }

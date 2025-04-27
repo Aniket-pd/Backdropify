@@ -33,3 +33,6 @@ struct CollectionDetailView: View {
         .background(Color.black.ignoresSafeArea())
     }
 }
+
+
+

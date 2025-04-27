@@ -45,3 +45,17 @@ struct WallpaperCardView: View {
         .cornerRadius(16)
     }
 }
+
+#Preview {
+    WallpaperCardView(
+        wallpaper: Wallpaper(
+            id: "sample-id",
+            name: "Sample Wallpaper",
+            url: "https://res.cloudinary.com/dxmwaa0nv/image/upload/v1745576498/illustrationatmosphericimag_71073153_iuoaql.png", // 🖼 sample random image URL
+            coin: 10
+        ),
+        showFavoriteButton: true
+    )
+    .padding()
+    .background(Color.black) // 👈 optional, to match your app style
+}

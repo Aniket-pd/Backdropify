@@ -59,3 +59,5 @@ struct WallpaperCardView: View {
     .padding()
     .background(Color.black) // 👈 optional, to match your app style
 }
+
+

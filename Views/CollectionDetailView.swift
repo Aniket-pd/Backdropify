@@ -2,7 +2,12 @@ import SwiftUI
 
 struct CollectionDetailView: View {
     let collection: WallpaperCollection
-    @StateObject private var viewModel = WallpapersByCollectionViewModel()
+    @StateObject private var viewModel: WallpapersByCollectionViewModel
+
+    init(collection: WallpaperCollection, viewModel: WallpapersByCollectionViewModel = WallpapersByCollectionViewModel()) {
+        self.collection = collection
+        _viewModel = StateObject(wrappedValue: viewModel)
+    }
     @StateObject private var favoritesManager = FavoritesManager.shared
     
     // 1️⃣ Define the grid structure: 2 columns
@@ -23,16 +28,36 @@ struct CollectionDetailView: View {
         .navigationTitle(collection.name)
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
-            if let collectionID = collection.id {
-                viewModel.fetchWallpapers(from: collectionID)
-                print("Collection ID: \(collectionID)")
-            } else {
-                print("Collection ID is nil")
+            // Prevent fetching during SwiftUI preview
+            if ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] != "1" {
+                if let collectionID = collection.id {
+                    viewModel.fetchWallpapers(from: collectionID)
+                    print("Collection ID: \(collectionID)")
+                } else {
+                    print("Collection ID is nil")
+                }
             }
         }
         .background(Color.black.ignoresSafeArea())
     }
 }
 
+#Preview {
+    let sampleCollection = WallpaperCollection(
+        id: "abstract_art",
+        name: "Abstract Art",
+        url: "https://picsum.photos/200/300"
+    )
 
+    let dummyWallpapers = [
+        Wallpaper(id: "1", name: "ap", url: "https://picsum.photos/200/300", coin: 10),
+        Wallpaper(id: "2", name: "ogo", url: "https://picsum.photos/200/301", coin: 20)
+    ]
 
+    let viewModel = WallpapersByCollectionViewModel()
+    viewModel.wallpapers = dummyWallpapers
+
+    return NavigationView {
+        CollectionDetailView(collection: sampleCollection, viewModel: viewModel)
+    }
+}

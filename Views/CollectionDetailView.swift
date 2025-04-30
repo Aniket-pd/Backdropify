@@ -50,7 +50,7 @@ struct CollectionDetailView: View {
     )
 
     let dummyWallpapers = [
-        Wallpaper(id: "1", name: "ap", url: "https://picsum.photos/200/300", coin: 10),
+        Wallpaper(id: "1", name: "ap", url: "https://res.cloudinary.com/dxmwaa0nv/image/upload/v1745576498/illustrationatmosphericimag_71073153_iuoaql.png", coin: 10),
         Wallpaper(id: "2", name: "ogo", url: "https://picsum.photos/200/301", coin: 20)
     ]
 

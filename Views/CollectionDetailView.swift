@@ -20,7 +20,9 @@ struct CollectionDetailView: View {
         ScrollView {
             LazyVGrid(columns: columns, spacing: 20) {
                 ForEach(viewModel.wallpapers) { wallpaper in
-                    WallpaperCardView(wallpaper: wallpaper, showFavoriteButton: true)
+                    NavigationLink(destination: WallpaperPreviewView(wallpaper: wallpaper)) {
+                        WallpaperCardView(wallpaper: wallpaper, showFavoriteButton: true)
+                    }
                 }
             }
             .padding()

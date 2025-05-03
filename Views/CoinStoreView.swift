@@ -7,15 +7,20 @@ struct CoinStoreView: View {
     var body: some View {
         VStack(spacing: 24) {
             // Top "Coins" title
-            Text("Coins")
-                .font(.system(size: 32, weight: .bold))
-                .foregroundColor(.white)
-                .padding(.top, 16)
+            HStack {
+                Text("Coins")
+                    .font(.system(size: 32, weight: .bold))
+                    .foregroundColor(.white)
+                    .padding(.top, 16)
+                    .padding(.leading, 12)
+                Spacer()
+            }
 
             // Section 1: Coin balance box
             RoundedRectangle(cornerRadius: 20)
                 .fill(Color.yellow.opacity(0.2)) // dark yellow with low opacity
                 .frame(width: 329, height: 144)
+                .padding(.bottom, 28)
                 .overlay(
                     HStack {
                         Image(systemName: "bitcoinsign.circle.fill") // placeholder icon
@@ -43,8 +48,8 @@ struct CoinStoreView: View {
                 Text("Get More Coins")
                     .font(.system(size: 20, weight: .bold))
                     .foregroundColor(.white)
-                    .padding(.top, 24)
-                    .padding(.bottom, 16)
+                    .padding(.bottom, 8)
+                    .padding(.leading, 14)
 
                 // 2x2 grid of buttons
                 LazyVGrid(columns: [GridItem(.fixed(155)), GridItem(.fixed(155))], spacing: 16) {
@@ -54,20 +59,24 @@ struct CoinStoreView: View {
                     coinButton(coinAmount: 500, price: 59)
                 }
             }
+            .padding(.bottom, 28)
 
             // Section 3: Earn Coins for Free
-            VStack(alignment: .leading, spacing: 12) {
-                Text("Earn coins for free")
-                    .font(.system(size: 20, weight: .bold))
-                    .foregroundColor(.white)
-                    .padding(.top, 24)
-                    .padding(.bottom, 16)
+            HStack {
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("Earn coins for free")
+                        .font(.system(size: 20, weight: .bold))
+                        .foregroundColor(.white)
+                        .padding(.bottom, 8)
 
-                VStack(spacing: 16) {
-                    earnButton(icon: "gift.fill", title: "Watch Ad", reward: "+50 coins")
-                    earnButton(icon: "clock.fill", title: "Daily bonus", reward: "+10 coins")
+                    VStack(spacing: 16) {
+                        earnButton(icon: "gift.fill", title: "Watch Ad", reward: "+50 coins")
+                        earnButton(icon: "clock.fill", title: "Daily bonus", reward: "+10 coins")
+                    }
                 }
+                Spacer()
             }
+            .padding(.leading, 16)
 
             Spacer()
         }
@@ -77,7 +86,10 @@ struct CoinStoreView: View {
 
     // Coin Button
     private func coinButton(coinAmount: Int, price: Int) -> some View {
-        Button(action: {}) {
+        Button(action: {
+            print("added \(coinAmount) coins")
+            coinCount += coinAmount
+        }) {
             HStack {
                 Text("\(coinAmount)")
                     .foregroundColor(.white)
@@ -95,7 +107,15 @@ struct CoinStoreView: View {
 
     // Earn Button
     private func earnButton(icon: String, title: String, reward: String) -> some View {
-        Button(action: {}) {
+        Button(action: {
+            if title == "Watch Ad" {
+                print("ad played")
+                coinCount += 50
+            } else if title == "Daily bonus" {
+                print("video watched")
+                coinCount += 10
+            }
+        }) {
             HStack {
                 Image(systemName: icon)
                     .foregroundColor(.white)

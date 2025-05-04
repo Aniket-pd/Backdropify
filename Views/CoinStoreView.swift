@@ -5,7 +5,7 @@ struct CoinStoreView: View {
     @State private var coinCount: Int = 2555
 
     var body: some View {
-        VStack(spacing: 24) {
+        VStack(spacing: 18) { // adjust padding between each section
             // Top "Coins" title
             HStack {
                 Text("Coins")
@@ -19,18 +19,20 @@ struct CoinStoreView: View {
             // Section 1: Coin balance box
             RoundedRectangle(cornerRadius: 20)
                 .fill(Color.yellow.opacity(0.2)) // dark yellow with low opacity
-                .frame(width: 329, height: 144)
+                .frame(width: 329, height: 100)
                 .padding(.bottom, 28)
                 .overlay(
-                    HStack {
-                        Image(systemName: "bitcoinsign.circle.fill") // placeholder icon
+                    HStack(alignment: .center) {
+                        Image("Bunch coin")
                             .resizable()
-                            .frame(width: 60, height: 60)
+                            .frame(width: 55, height: 55)
                             .foregroundColor(.yellow)
+                            //.padding(.leading, 0)
+                            .padding(.bottom, 20)
+                            .padding(.trailing, 50) // adjust distance between icon and text
+                            //.border(Color.red)
                         
-                        Spacer()
-                        
-                        VStack(alignment: .trailing, spacing: 5) {
+                        VStack(alignment: .center, spacing: 5) {
                             Text("You have")
                                 .font(.system(size: 18))
                                 .foregroundColor(.white)
@@ -38,9 +40,11 @@ struct CoinStoreView: View {
                                 .font(.system(size: 22, weight: .bold))
                                 .foregroundColor(.white)
                         }
+                        //.border(Color.red)
+                        .padding(.bottom, 20)
                     }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
                     .padding(16)
-                    .frame(height: 144)
                 )
 
             // Section 2: Get More Coins
@@ -52,12 +56,16 @@ struct CoinStoreView: View {
                     .padding(.leading, 14)
 
                 // 2x2 grid of buttons
-                LazyVGrid(columns: [GridItem(.fixed(155)), GridItem(.fixed(155))], spacing: 16) {
+                LazyVGrid(columns: [
+                    GridItem(.flexible(), spacing: 16),
+                    GridItem(.flexible(), spacing: 16)
+                ], spacing: 16) {
                     coinButton(coinAmount: 50, price: 59)
                     coinButton(coinAmount: 100, price: 59)
                     coinButton(coinAmount: 250, price: 59)
                     coinButton(coinAmount: 500, price: 59)
                 }
+                .padding(.horizontal, 16)
             }
             .padding(.bottom, 28)
 
@@ -70,8 +78,14 @@ struct CoinStoreView: View {
                         .padding(.bottom, 8)
 
                     VStack(spacing: 16) {
-                        earnButton(icon: "gift.fill", title: "Watch Ad", reward: "+50 coins")
-                        earnButton(icon: "clock.fill", title: "Daily bonus", reward: "+10 coins")
+                        earnButton(icon: "gift.fill", iconColor: .black, title: "Watch Ad", reward: "+50 coins", textColor: .black,     backgroundColor: Color(red: 1.0, green: 0.76, blue: 0.38, opacity: 1), cornerRadius: 10) {
+                            print("ad played")
+                            coinCount += 50
+                        }
+                        earnButton(icon: "clock.fill", iconColor: .white, title: "Daily bonus", reward: "+10 coins", textColor: .white, backgroundColor: .gray.opacity(0.15), cornerRadius: 10) {
+                            print("video watched")
+                            coinCount += 10
+                        }
                     }
                 }
                 Spacer()
@@ -92,45 +106,39 @@ struct CoinStoreView: View {
         }) {
             HStack {
                 Text("\(coinAmount)")
+                    .font(.system(size: 16, weight: .semibold))
                     .foregroundColor(.white)
                 Image(systemName: "bitcoinsign.circle.fill")
                     .foregroundColor(.yellow)
                 Text("for $\(price)")
+                    .font(.system(size: 16, weight: .semibold))
                     .foregroundColor(.white)
             }
-            .padding(.horizontal, 16)
-            .frame(width: 155, height: 48)
-            .background(Color.gray.opacity(0.2))
+            .padding(.horizontal, 0)
+            .frame(maxWidth: .infinity, minHeight: 48)
+            .background(Color.gray.opacity(0.13))
             .cornerRadius(12)
         }
     }
 
     // Earn Button
-    private func earnButton(icon: String, title: String, reward: String) -> some View {
-        Button(action: {
-            if title == "Watch Ad" {
-                print("ad played")
-                coinCount += 50
-            } else if title == "Daily bonus" {
-                print("video watched")
-                coinCount += 10
-            }
-        }) {
+    private func earnButton(icon: String, iconColor: Color, title: String, reward: String, textColor: Color, backgroundColor: Color, cornerRadius: CGFloat, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
             HStack {
                 Image(systemName: icon)
-                    .foregroundColor(.white)
+                    .foregroundColor(iconColor)
                 Text(title)
-                    .font(.system(size: 18, weight: .bold))
-                    .foregroundColor(.white)
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundColor(textColor)
                 Spacer()
                 Text(reward)
                     .font(.system(size: 16))
-                    .foregroundColor(.white)
+                    .foregroundColor(textColor)
             }
             .padding(.horizontal, 16)
             .frame(width: 329, height: 48)
-            .background(icon == "gift.fill" ? Color.yellow : Color.gray.opacity(0.2))
-            .cornerRadius(12)
+            .background(backgroundColor)
+            .cornerRadius(cornerRadius)
         }
     }
 }

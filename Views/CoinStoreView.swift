@@ -16,57 +16,31 @@ struct CoinStoreView: View {
                 .clipped()
                 .overlay(
                     LinearGradient(
-                        gradient: Gradient(colors: [Color.clear, Color.black]),
-                        startPoint: .center,
+                        gradient: Gradient(colors: [Color.clear, Color.black.opacity(0), Color.black]),
+                        startPoint: .top,
                         endPoint: .bottom
                     )
-                    .frame(height: 110)
-                    .padding(.top, 200)
+                    .frame(height: 330)
+                    .padding(.top, 30)
                 )
                 .ignoresSafeArea(edges: .top)
 
             VStack(spacing: 18) { // Section 1 (coin balance)
-                VStack(alignment: .center, spacing: 0) {
+                VStack(alignment: .center, spacing: 10) {
                     Text("You have")
-                        .font(.system(size: 32, weight: .regular))
+                        .font(.system(size: 20, weight: .bold))
                         .foregroundColor(.white)
-                        .kerning(1.5) // distance between charcters
+                        .kerning(0.5) // distance between charcters
                         //.padding(.leading, 30)
 
                     GeometryReader { geometry in
-                        let text = Text("\(displayedCoinCount) coins")
-                            .font(.system(size: 60, weight: .bold))
+                        Text("\(displayedCoinCount) coins")
+                            .font(.system(size: 50, weight: .heavy))
+                            .foregroundColor(.white)
+                            .shadow(color: .black.opacity(0.25), radius: 6, x: 1, y: 1)
                             .minimumScaleFactor(0.5)
                             .lineLimit(1)
                             .frame(maxWidth: geometry.size.width)
-
-                        text
-                            .overlay(
-                                LinearGradient(
-                                    gradient: Gradient(colors: [
-                                        Color(red: 255/255, green: 203/255, blue: 130/255),
-                                        Color(red: 255/255, green: 220/255, blue: 242/255)
-                                    ]),
-                                    startPoint: .leading,
-                                    endPoint: .trailing
-                                )
-                                .mask(text)
-                            )
-                            .overlay(
-                                LinearGradient(
-                                    gradient: Gradient(colors: [
-                                        Color.white.opacity(0),
-                                        Color.white.opacity(0.8),
-                                        Color.white.opacity(0)
-                                    ]),
-                                    startPoint: .top,
-                                    endPoint: .bottom
-                                )
-                                .rotationEffect(.degrees(30))
-                                .offset(x: geometry.size.width * shimmer)
-                                .mask(text)
-                                .animation(Animation.linear(duration: 2).repeatForever(autoreverses: false), value: shimmer)
-                            )
                             .onAppear {
                                 animateCoinCount(to: coinCount)
                             }
@@ -108,7 +82,7 @@ struct CoinStoreView: View {
                             .padding(.bottom, 8)
 
                         VStack(spacing: 16) {
-                            earnButton(icon: "gift.fill", iconColor: .black, title: "Watch Ad", reward: "+50 coins", textColor: .black, background: AnyView(
+                            earnButton(icon: "gift", iconColor: .black, title: "Watch Ad", reward: "+50 coins", textColor: .black, background: AnyView(
                                 LinearGradient(
                                     gradient: Gradient(colors: [
                                         Color(red: 254/255, green: 0/255, blue: 162/255),
@@ -122,7 +96,7 @@ struct CoinStoreView: View {
                                 coinCount += 50
                                 animateCoinCount(to: coinCount)
                             }
-                            earnButton(icon: "clock.fill", iconColor: .white, title: "Daily bonus", reward: "+10 coins", textColor: .white, background: AnyView(Color.gray.opacity(0.15)), cornerRadius: 10) {
+                            earnButton(icon: "clock", iconColor: .white, title: "Daily bonus", reward: "+10 coins", textColor: .white, background: AnyView(Color.gray.opacity(0.15)), cornerRadius: 10) {
                                 print("video watched")
                                 coinCount += 10
                                 animateCoinCount(to: coinCount)
@@ -149,17 +123,19 @@ struct CoinStoreView: View {
             animateCoinCount(to: coinCount)
         }) {
             HStack {
+                
+                Image("Coin")
+                    .foregroundColor(.yellow)
                 Text("\(coinAmount)")
                     .font(.system(size: 16, weight: .semibold))
                     .foregroundColor(.white)
-                Image(systemName: "bitcoinsign.circle.fill")
-                    .foregroundColor(.yellow)
+                    
                 Text("for $\(price)")
                     .font(.system(size: 16, weight: .semibold))
                     .foregroundColor(.white)
             }
             .padding(.horizontal, 0)
-            .frame(maxWidth: .infinity, minHeight: 48)
+            .frame(maxWidth: .infinity, minHeight: 52)
             .background(Color.gray.opacity(0.13))
             .cornerRadius(12)
         }
@@ -168,19 +144,22 @@ struct CoinStoreView: View {
     // Earn Button
     private func earnButton(icon: String, iconColor: Color, title: String, reward: String, textColor: Color, background: AnyView, cornerRadius: CGFloat, action: @escaping () -> Void) -> some View {
         Button(action: action) {
-            HStack {
+            HStack(spacing: 13) {
                 Image(systemName: icon)
                     .foregroundColor(iconColor)
+                    .shadow(color: .black.opacity(0.25), radius: 6, x: 1, y: 1)
                 Text(title)
                     .font(.system(size: 16, weight: .semibold))
                     .foregroundColor(textColor)
+                    .shadow(color: .black.opacity(0.25), radius: 6, x: 1, y: 1)
                 Spacer()
                 Text(reward)
                     .font(.system(size: 16))
                     .foregroundColor(textColor)
+                    .shadow(color: .black.opacity(0.25), radius: 6, x: 1, y: 1)
             }
             .padding(.horizontal, 16)
-            .frame(width: 329, height: 48)
+            .frame(width: 329, height: 52)
             .background(background)
             .cornerRadius(cornerRadius)
         }

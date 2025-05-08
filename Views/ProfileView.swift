@@ -9,11 +9,12 @@ struct ProfileView: View {
         VStack(spacing: 30) {
             // MARK: - Profile Info
             HStack(alignment: .center, spacing: 16) {
-                Image(systemName: "person.circle.fill")
+                Image(systemName: "person.crop.circle")
                     .resizable()
                     .frame(width: 111, height: 110)
                     .clipShape(Circle())
                     .foregroundColor(.gray)
+                    .padding(.leading, 16)
 
                 VStack(alignment: .leading, spacing: 8) {
                     Text(username)
@@ -35,13 +36,17 @@ struct ProfileView: View {
                 Spacer()
             }
             .padding(.horizontal)
+            .padding(.top, 18)
 
             // MARK: - Menu Buttons
             VStack(spacing: 20) {
                 ProfileButton(label: "Purchase History", icon: "clock") {
                     print("purchase History")
                 }
-                ProfileButton(label: "My Downloads", icon: "arrow.down.circle") {
+                ProfileButton(label: "Coin History", icon: "banknote") {
+                    print("purchase History")
+                }
+                ProfileButton(label: "My Downloads", icon: "square.and.arrow.down.on.square") {
                     print("my download")
                 }
                 ProfileButton(label: "Switch theme", icon: "circle.lefthalf.filled") {
@@ -53,6 +58,7 @@ struct ProfileView: View {
                 ProfileButton(label: "Logout", icon: "rectangle.portrait.and.arrow.right", isLogout: true) {
                     print("logout")
                 }
+                
             }
 
             Spacer()
@@ -76,20 +82,20 @@ struct ProfileButton: View {
 
     var body: some View {
         Button(action: action) {
-            HStack {
+            HStack(spacing: 13) {
                 Image(systemName: icon)
                     .foregroundColor(isLogout ? .red : .white)
                     .frame(width: 24)
-
+                    
                 Text(label)
                     .foregroundColor(isLogout ? .red : .white)
-                    .font(.system(size: 18, weight: .bold))
+                    .font(.system(size: 16, weight: .semibold))
 
                 Spacer()
             }
             .padding(.horizontal)
-            .frame(width: 328, height: 61)
-            .background(Color(.darkGray))
+            .frame(width: 328, height: 52)
+            .background(Color.gray.opacity(0.15))
             .cornerRadius(12)
         }
     }

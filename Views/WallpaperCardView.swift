@@ -7,74 +7,63 @@ struct WallpaperCardView: View {
     @State private var animateHeart = false
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            ZStack(alignment: .topTrailing) {
-                AsyncImage(url: URL(string: wallpaper.url)) { image in
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                } placeholder: {
-                    ProgressView()
-                }
-                .frame(width: 175, height: 300)
-                .clipped()
-                .cornerRadius(16)
-
-                VStack {
-                    Spacer()
-                    Rectangle()
-                        .fill(Color(hex: "#252525").opacity(0.5))
-                        .frame(height: 45)
-                        .cornerRadius(16, corners: [.bottomLeft, .bottomRight])
-                        .overlay(
-                            HStack {
-                                VStack(alignment: .leading, spacing: 4) {
-                                    Text(wallpaper.name)
-                                        .foregroundColor(.white)
-                                        .font(.system(size: 14, weight: .semibold))
-                                    HStack(spacing: 4) {
-                                        Image("Coin") // Customize or replace with a custom coin image
-                                            .foregroundColor(.yellow)
-                                            .font(.caption)
-                                        Text("\(wallpaper.coin)")
-                                            .foregroundColor(.white)
-                                            .font(.system(size: 10, weight: .semibold))
-                                    }
-                                }
-
-                                Spacer()
-
-                                if showFavoriteButton {
-                                    Button(action: {
-                                        withAnimation {
-                                            let isNowFavorite = !favoritesManager.isFavorite(wallpaper: wallpaper)
-                                            favoritesManager.toggleFavorite(wallpaper: wallpaper)
-                                            animateHeart.toggle()
-                                            if isNowFavorite {
-                                                let generator = UINotificationFeedbackGenerator()
-                                                generator.notificationOccurred(.success)
-                                            }
-                                        }
-                                    }) {
-                                        Image(systemName: favoritesManager.isFavorite(wallpaper: wallpaper) ? "heart.circle.fill" : "heart.circle")
-                                            .resizable()
-                                            .frame(width: 25, height: 25)
-                                            .foregroundColor(favoritesManager.isFavorite(wallpaper: wallpaper) ? .red : .gray)
-                                            .symbolEffect(.bounce, value: animateHeart)
-                                            .padding(6)
-                                            
-                                    }
-                                }
-                            }
-                            .padding(.horizontal, 8)
-                            .padding(.bottom, 6),
-                            alignment: .bottom
-                        )
-                }
+        ZStack(alignment: .bottom) {
+            // Wallpaper Image
+            AsyncImage(url: URL(string: wallpaper.url)) { image in
+                image
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 166, height: 220)
+                    .clipped()
+            } placeholder: {
+                ProgressView()
+                    .frame(width: 166, height: 220)
             }
+            .cornerRadius(16)
+
+            // Bottom Label Overlay
+            Rectangle()
+                .fill(Color.black.opacity(0.5))
+                .frame(width: 166, height: 40)
+                .overlay(
+                    HStack {
+                        HStack(spacing: 4) {
+                            Image("Coin")
+                                .resizable()
+                                .frame(width: 12, height: 9)
+                            Text("\(wallpaper.coin)")
+                                .foregroundColor(.white)
+                                .font(.system(size: 13, weight: .semibold))
+                        }
+                        .padding(.leading, 15)
+
+                        Spacer()
+
+                        if showFavoriteButton {
+                            Button(action: {
+                                withAnimation {
+                                    let isNowFavorite = !favoritesManager.isFavorite(wallpaper: wallpaper)
+                                    favoritesManager.toggleFavorite(wallpaper: wallpaper)
+                                    animateHeart.toggle()
+                                    if isNowFavorite {
+                                        let generator = UINotificationFeedbackGenerator()
+                                        generator.notificationOccurred(.success)
+                                    }
+                                }
+                            }) {
+                                Image(systemName: favoritesManager.isFavorite(wallpaper: wallpaper) ? "heart.fill" : "heart")
+                                    .resizable()
+                                    .frame(width: 13, height: 14)
+                                    .foregroundColor(favoritesManager.isFavorite(wallpaper: wallpaper) ? .red : .gray)
+                                    .symbolEffect(.bounce, value: animateHeart)
+                            }
+                            .padding(.trailing, 15)
+                        }
+                    }
+                )
+                .cornerRadius(16, corners: [.bottomLeft, .bottomRight])
         }
-        .background(Color.gray.opacity(0.2))
-        .cornerRadius(16)
+        .frame(width: 166, height: 220)
     }
 }
 
@@ -126,4 +115,5 @@ extension Color {
     )
     .padding()
     .background(Color.black) // 👈 optional, to match your app style
+    .frame(maxWidth: .infinity, maxHeight: .infinity)
 }

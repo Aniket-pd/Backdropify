@@ -30,6 +30,8 @@ struct WallpaperCardView: View {
                         HStack(spacing: 4) {
                             Image("Coin")
                                 .resizable()
+                                .renderingMode(.template)
+                                .foregroundColor(.white)
                                 .frame(width: 12, height: 9)
                             Text("\(wallpaper.coin)")
                                 .foregroundColor(.white)
@@ -53,7 +55,7 @@ struct WallpaperCardView: View {
                             }) {
                                 Image(systemName: favoritesManager.isFavorite(wallpaper: wallpaper) ? "heart.fill" : "heart")
                                     .resizable()
-                                    .frame(width: 13, height: 14)
+                                    .frame(width: 14, height: 13)
                                     .foregroundColor(favoritesManager.isFavorite(wallpaper: wallpaper) ? .red : .gray)
                                     .symbolEffect(.bounce, value: animateHeart)
                             }

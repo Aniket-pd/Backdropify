@@ -3,6 +3,7 @@ import SwiftUI
 struct CollectionDetailView: View {
     let collection: WallpaperCollection
     @StateObject private var viewModel: WallpapersByCollectionViewModel
+    @Environment(\.presentationMode) private var presentationMode
 
     init(collection: WallpaperCollection, viewModel: WallpapersByCollectionViewModel = WallpapersByCollectionViewModel()) {
         self.collection = collection
@@ -16,19 +17,33 @@ struct CollectionDetailView: View {
         GridItem(.flexible())
     ]
     
-    var body: some View {
-        ScrollView {
-            LazyVGrid(columns: columns, spacing: 20) {
-                ForEach(viewModel.wallpapers) { wallpaper in
-                    NavigationLink(destination: WallpaperPreviewView(wallpaper: wallpaper)) {
-                        WallpaperCardView(wallpaper: wallpaper, showFavoriteButton: true)
+var body: some View {
+    VStack(spacing: 18) {
+            Text(collection.name)
+                .font(.system(size: 28))
+                .fontWeight(.bold)
+                .multilineTextAlignment(.center)
+                .padding(.top,22)
+                .colorInvert()
+            
+            Divider()
+            .frame(width: 302, height: 0.2)
+                .overlay(.white)
+                .padding(.bottom, 10)
+            
+            ScrollView {
+                LazyVGrid(columns: columns, spacing: 20) {
+                    ForEach(viewModel.wallpapers) { wallpaper in
+                        NavigationLink(destination: WallpaperPreviewView(wallpaper: wallpaper)) {
+                            WallpaperCardView(wallpaper: wallpaper, showFavoriteButton: true)
+                        }
                     }
                 }
+                .padding(.top, 0)
+                .padding([.leading, .trailing])
             }
-            .padding()
         }
-        .navigationTitle(collection.name)
-        .navigationBarTitleDisplayMode(.inline)
+        .background(Color(red: 20/255, green: 20/255, blue: 20/255).ignoresSafeArea())
         .onAppear {
             // Prevent fetching during SwiftUI preview
             if ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] != "1" {
@@ -40,7 +55,32 @@ struct CollectionDetailView: View {
                 }
             }
         }
-        .background(Color.black.ignoresSafeArea())
+        //.navigationTitle(collection.name)
+        .navigationBarTitleDisplayMode(.inline)
+        .tint(.white)
+        .toolbarBackground(.black)
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: {
+                    presentationMode.wrappedValue.dismiss()
+                }) {
+                    HStack(spacing: 4) {
+                        Image(systemName: "chevron.left")
+                        Text("Back")
+                    }
+                    .foregroundColor(.white)
+                    .font(.system(size: 16))
+                }
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                HStack(spacing: 1) {
+                    Image(systemName: "Coin")
+                    Text("999")
+                }
+                .font(.system(size: 16))
+            }
+        }
     }
 }
 

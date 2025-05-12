@@ -95,3 +95,9 @@ struct WallpaperPreviewView: View {
         .toolbar(.hidden, for: .tabBar)
     }
 }
+
+
+
+    #Preview {
+        WallpaperPreviewView(wallpaper: Wallpaper(id: "1", name: "Sample Wallpaper", url: "https://res.cloudinary.com/dxmwaa0nv/image/upload/v1745523881/digitalartcloseupportrait_8173878_favrne.png", coin: 10))
+    }

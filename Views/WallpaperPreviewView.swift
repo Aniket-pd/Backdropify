@@ -12,86 +12,110 @@ struct WallpaperPreviewView: View {
     @Environment(\.dismiss) var dismiss
 
     var body: some View {
-        ZStack {
-            // 1. Display the wallpaper full screen
-            AsyncImage(url: URL(string: wallpaper.url)) { phase in
-                switch phase {
-                case .empty:
-                    ProgressView()
-                case .success(let image):
-                    image
-                        .resizable()
-                        .scaledToFill()
-                        .ignoresSafeArea()
-                case .failure:
-                    Color.gray
-                @unknown default:
-                    EmptyView()
-                }
-            }
-
-            // 2. Top bar: Back button + Coin price
-            VStack {
-                HStack {
-                    Button(action: {
-                        dismiss()
-                    }) {
-                        Image(systemName: "chevron.left")
-                            .foregroundColor(.white)
-                            .padding()
-                            .background(Color.black.opacity(0.5))
-                            .clipShape(Circle())
+        GeometryReader { geometry in
+            ZStack {
+                // Fullscreen wallpaper image
+                AsyncImage(url: URL(string: wallpaper.url)) { phase in
+                    switch phase {
+                    case .empty:
+                        ProgressView()
+                    case .success(let image):
+                        image
+                            .resizable()
+                            .scaledToFill()
+                            .ignoresSafeArea()
+                    case .failure:
+                        Color.gray
+                    @unknown default:
+                        EmptyView()
                     }
+                }
 
-                    Spacer()
+                // Transparent top navigation bar
+                VStack {
+                    HStack {
+                        Button(action: {
+                            dismiss()
+                        }) {
+                            Image(systemName: "chevron.left")
+                                .foregroundColor(.white)
+                                .padding(10)
+                                .background(Color.black.opacity(0.4))
+                                .clipShape(Circle())
+                        }
 
-                    Text("\(wallpaper.coin) 🪙")
-                        .foregroundColor(.white)
+                        Spacer()
+
+                        HStack(spacing: 4) {
+                            Image(systemName: "bitcoinsign.circle")
+                                .foregroundColor(.white)
+                            Text("\(wallpaper.coin)")
+                                .foregroundColor(.white)
+                        }
                         .padding(.horizontal)
                         .padding(.vertical, 6)
-                        .background(Color.black.opacity(0.5))
+                        .background(Color.black.opacity(0.4))
                         .clipShape(Capsule())
+                    }
+                    .padding(.top, 50)
+                    .padding(.horizontal)
+
+                    Spacer()
                 }
-                .padding(.top, 50) // Adjust as per notch safe area
-                .padding(.horizontal)
+                .frame(width: geometry.size.width, height: geometry.size.height)
+                .ignoresSafeArea()
 
-                Spacer()
-            }
-
-            VStack {
-                Spacer()
-                HStack(spacing: 40) {
-                    Button(action: {
-                        print("Info button tapped")
-                    }) {
-                        Image(systemName: "info.circle")
-                            .font(.title)
+                // Transparent tab view with three buttons
+                VStack {
+                    Spacer()
+                    HStack(spacing: 40) {
+                        Button(action: {
+                            print("Information button pressed")
+                        }) {
+                            VStack {
+                                Image(systemName: "info.circle")
+                                    .font(.title2)
+                                Text("Info")
+                                    .font(.caption)
+                            }
                             .foregroundColor(.white)
-                    }
+                        }
 
-                    Button(action: {
-                        print("Download button tapped")
-                    }) {
-                        Image(systemName: "arrow.down.circle")
-                            .font(.title)
+                        Button(action: {
+                            print("Download button pressed")
+                        }) {
+                            VStack {
+                                Image(systemName: "arrow.down.circle")
+                                    .font(.title2)
+                                Text("Download")
+                                    .font(.caption)
+                            }
                             .foregroundColor(.white)
-                    }
+                        }
 
-                    Button(action: {
-                        print("Preview button tapped")
-                    }) {
-                        Image(systemName: "eye")
-                            .font(.title)
+                        Button(action: {
+                            print("iPhone Preview button pressed")
+                        }) {
+                            VStack {
+                                Image(systemName: "iphone")
+                                    .font(.title2)
+                                Text("Preview")
+                                    .font(.caption)
+                            }
                             .foregroundColor(.white)
+                        }
                     }
+                    .padding()
+                    .background(Color.black.opacity(0.4))
+                    .clipShape(Capsule())
+                    .padding(.bottom, 40)
                 }
-                .padding()
-                .background(Color.black.opacity(0.5))
-                .clipShape(Capsule())
-                .padding(.bottom, 40)
+                .frame(width: geometry.size.width, height: geometry.size.height)
+                .ignoresSafeArea()
             }
+            .frame(width: geometry.size.width, height: geometry.size.height)
         }
-        .navigationBarHidden(true) // hides default nav bar
+        .navigationBarHidden(true)
         .toolbar(.hidden, for: .tabBar)
     }
 }
@@ -99,5 +123,5 @@ struct WallpaperPreviewView: View {
 
 
     #Preview {
-        WallpaperPreviewView(wallpaper: Wallpaper(id: "1", name: "Sample Wallpaper", url: "https://res.cloudinary.com/dxmwaa0nv/image/upload/v1745523881/digitalartcloseupportrait_8173878_favrne.png", coin: 10))
+        WallpaperPreviewView(wallpaper: Wallpaper(id: "1", name: "Sample Wallpaper", url: "https://res.cloudinary.com/dxmwaa0nv/image/upload/v1746215697/IMG_5081_w5tbvj.jpg", coin: 10))
     }

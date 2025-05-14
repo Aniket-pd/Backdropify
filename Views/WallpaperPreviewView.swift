@@ -105,11 +105,12 @@ struct WallpaperPreviewView: View {
                             .foregroundColor(.white)
                         }
                     }
+                    .frame(width: geometry.size.width)
                     .padding()
                     .background(Color.black.opacity(0.4))
-                    .clipShape(Capsule())
-                    .padding(.bottom, 40)
-                }
+                   // .clipShape(Capsule())
+                    .padding(.bottom, -100)
+                                    }
                 .frame(width: geometry.size.width, height: geometry.size.height)
                 .ignoresSafeArea()
             }

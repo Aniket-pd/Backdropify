@@ -34,7 +34,7 @@ var body: some View {
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 20) {
                     ForEach(viewModel.wallpapers) { wallpaper in
-                        NavigationLink(destination: WallpaperPreviewView(wallpaper: wallpaper)) {
+                        NavigationLink(destination: WallpaperPreviewView(wallpapers: viewModel.wallpapers)) {
                             WallpaperCardView(wallpaper: wallpaper, showFavoriteButton: true)
                         }
                     }

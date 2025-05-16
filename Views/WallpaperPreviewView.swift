@@ -7,6 +7,7 @@ import SwiftUI
 struct WallpaperPreviewView: View {
     let wallpapers: [Wallpaper]
     @Environment(\.dismiss) var dismiss
+    @State private var animateSpotlight = false
 
     // MARK: - Layout Constants
     // Using constants for these makes adjustments easier and code cleaner.
@@ -34,9 +35,41 @@ struct WallpaperPreviewView: View {
     }
 
     var body: some View {
-        // The ScrollView is the main container for the horizontally scrolling wallpapers.
-        // showsIndicators: false - Hides the horizontal scroll bar for a cleaner UI.
-        ScrollView(.horizontal, showsIndicators: false) {
+        ZStack {
+            // More realistic light ray simulation using linear gradients
+            ZStack {
+                LinearGradient(
+                    gradient: Gradient(colors: [
+                        Color.white.opacity(0.15),
+                        Color.white.opacity(0.05),
+                        Color.clear
+                    ]),
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                .blur(radius: 100)
+                .blendMode(.screen)
+                .ignoresSafeArea()
+
+                // Optional secondary layer for depth
+                RadialGradient(
+                    gradient: Gradient(colors: [Color.white.opacity(0.08), Color.clear]),
+                    center: .topLeading,
+                    startRadius: animateSpotlight ? 100 : 60,
+                    endRadius: animateSpotlight ? 600 : 400
+                )
+                .blendMode(.screen)
+                .ignoresSafeArea()
+                .onAppear {
+                    withAnimation(.easeInOut(duration: 3).repeatForever(autoreverses: true)) {
+                        animateSpotlight.toggle()
+                    }
+                }
+            }
+
+            // The ScrollView is the main container for the horizontally scrolling wallpapers.
+            // showsIndicators: false - Hides the horizontal scroll bar for a cleaner UI.
+            ScrollView(.horizontal, showsIndicators: false) {
             // HStack arranges the wallpapers horizontally.
             // Spacing is applied between each wallpaper item.
             HStack(spacing: itemSpacing) {
@@ -184,16 +217,18 @@ struct WallpaperPreviewView: View {
             // It adds space to the left of the first item and right of the last item.
             .padding(.horizontal, hStackHorizontalPadding)
         }
+        .scrollTargetLayout()
         // MARK: - Snappy Scrolling Behavior
         // .viewAligned is THE key to making the ScrollView snap items to the center (or leading edge based on context).
         // When the user finishes scrolling, the ScrollView automatically animates to align the nearest item.
-        .scrollTargetBehavior(.viewAligned)
+        .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
         // .ignoresSafeArea() allows the wallpaper preview to extend into the screen's safe areas
         // for a more immersive experience.
         .ignoresSafeArea()
         // .scrollBounceBehavior can be useful but .viewAligned often provides the desired carousel feel.
         // .basedOnSize is generally a good default if you want bounce.
         .scrollBounceBehavior(.basedOnSize)
+        }
     }
 }
 

@@ -9,17 +9,29 @@ struct WallpaperPreviewView: View {
     @Environment(\.dismiss) var dismiss
     @State private var animateSpotlight = false
 
+    private var formattedTime: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        return formatter.string(from: Date())
+    }
+
+    private var formattedDate: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "EEEE d MMMM"
+        return formatter.string(from: Date())
+    }
+
     // MARK: - Layout Constants
     // Using constants for these makes adjustments easier and code cleaner.
 
-    // Each item takes 80% of the screen width.
+    // Each item takes 78% of the screen width for a neighbor-peek effect.
     private var itemWidth: CGFloat {
-        UIScreen.main.bounds.width * 0.8
+        UIScreen.main.bounds.width * 0.78 // Slightly smaller to show neighbors
     }
 
-    // Adjust height as needed, 70% of screen height here.
+    // Height maintains iPhone 14 Pro Max lockscreen aspect ratio.
     private var itemHeight: CGFloat {
-        UIScreen.main.bounds.height * 0.7
+        itemWidth * (2796.0 / 1290.0) // iPhone 14 Pro Max lockscreen aspect ratio
     }
 
     // Spacing between wallpaper items.
@@ -53,7 +65,7 @@ struct WallpaperPreviewView: View {
 
                 // Optional secondary layer for depth
                 RadialGradient(
-                    gradient: Gradient(colors: [Color.white.opacity(0.08), Color.clear]),
+                    gradient: Gradient(colors: [Color.white.opacity(0.1), Color.clear]),
                     center: .topLeading,
                     startRadius: animateSpotlight ? 100 : 60,
                     endRadius: animateSpotlight ? 600 : 400
@@ -124,57 +136,66 @@ struct WallpaperPreviewView: View {
                         // Clips the image content to a rounded rectangle shape.
                         .clipShape(RoundedRectangle(cornerRadius: 20))
                         // Adds a shadow for a depth effect, enhancing the visual hierarchy.
-                        .shadow(color: .black.opacity(0.3), radius: 8, x: 0, y: 4)
+                        .shadow(color: .black.opacity(0.4), radius: 12, x: 0, y: 6)
+                        .overlay(
+                            RadialGradient(
+                                gradient: Gradient(colors: [
+                                    Color.white.opacity(animateSpotlight ? 0.12 : 0.06),
+                                    Color.black.opacity(0.2),
+                                    Color.black.opacity(0.35)
+                                ]),
+                                center: .center,
+                                startRadius: animateSpotlight ? 20 : 10,
+                                endRadius: animateSpotlight ? 250 : 180
+                            )
+                            .blendMode(.overlay)
+                            .clipShape(RoundedRectangle(cornerRadius: 20))
+                        )
 
-                        // Overlay for controls (buttons, info)
-                        // This VStack is layered on top of the image.
+                        // Overlay mimicking iPhone lock screen
                         VStack {
-                            // Top controls: Dismiss button and coin info
+                            // Top: Day and Time
+                            VStack(spacing: 2) {
+                                Text(formattedDate)
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                                Text(formattedTime)
+                                    .font(.system(size: 80, weight: .bold, design: .default))
+                                    .foregroundColor(.white)
+                            }
+                            .padding(.top, 30)
+
+                            Spacer()
+
+                            // Bottom: Flashlight and Camera
                             HStack {
-                                Button(action: { dismiss() }) {
-                                    Image(systemName: "chevron.left.circle.fill")
+                                Button(action: {
+                                    print("Flashlight tapped")
+                                }) {
+                                    Image(systemName: "flashlight.on.fill")
                                         .font(.title)
-                                        .padding(12) // Adjusted padding
                                         .foregroundColor(.white)
-                                        .background(Color.black.opacity(0.4)) // Slightly increased opacity for better contrast
+                                        .frame(width: 60, height: 60)
+                                        .background(Color.black.opacity(0.4))
                                         .clipShape(Circle())
                                 }
+
                                 Spacer()
-                                HStack {
-                                    Image(systemName: "bitcoinsign.circle.fill")
-                                    Text("\(wallpaper.coin)")
-                                        .fontWeight(.bold)
+
+                                Button(action: {
+                                    print("Camera tapped")
+                                }) {
+                                    Image(systemName: "camera.fill")
+                                        .font(.title)
+                                        .foregroundColor(.white)
+                                        .frame(width: 60, height: 60)
+                                        .background(Color.black.opacity(0.4))
+                                        .clipShape(Circle())
                                 }
-                                .padding(.horizontal, 12)
-                                .padding(.vertical, 8)
-                                .foregroundColor(.white)
-                                .background(Color.black.opacity(0.4))
-                                .clipShape(Capsule())
                             }
-                            .padding(.horizontal) // Padding for the top bar content from item edges
-                            .padding(.top) // Padding from the top of the item
-
-                            Spacer() // Pushes the bottom controls to the bottom
-
-                            // Bottom controls: Info, Download, Preview
-                            HStack(spacing: 10) { // Added spacing between control buttons
-                                Spacer() // Distributes buttons evenly
-                                ControlButton(systemName: "info.circle.fill", text: "Info") { print("Info: \(wallpaper.name)") }
-                                Spacer()
-                                ControlButton(systemName: "arrow.down.circle.fill", text: "Download") { print("Download: \(wallpaper.name)") }
-                                Spacer()
-                                ControlButton(systemName: "iphone.gen2.circle.fill", text: "Set") { print("Preview/Set: \(wallpaper.name)") } // Changed icon to be more about setting wallpaper
-                                Spacer()
-                            }
-                            .padding(.vertical, 12) // Adjusted padding
-                            .frame(maxWidth: .infinity) // Ensures the background spans the width
-                            .background(Color.black.opacity(0.5)) // Increased opacity for better readability of controls
-                            // Apply clipping to the background only, not the content, for a "bar" effect
-                            .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous)) // Smoother corners
-                            .padding(.horizontal) // Padding for the control bar itself from item edges
-                            .padding(.bottom, 12) // Padding from the bottom edge of the item
+                            .padding(.horizontal, 30)
+                            .padding(.bottom, 24)
                         }
-                        // This frame ensures the overlay VStack spans the same dimensions as the wallpaper item.
                         .frame(width: itemWidth, height: itemHeight)
                     }
                     // This frame is for the ZStack (each individual wallpaper item).
@@ -229,6 +250,7 @@ struct WallpaperPreviewView: View {
         // .basedOnSize is generally a good default if you want bounce.
         .scrollBounceBehavior(.basedOnSize)
         }
+        .toolbar(.hidden, for: .tabBar)
     }
 }
 
@@ -262,10 +284,9 @@ struct WallpaperPreviewView_Previews: PreviewProvider {
         // Using diverse and actual image URLs will make the preview more representative.
         // Ensure these URLs are accessible. Consider using placeholder services if actual URLs are unstable for previews.
         WallpaperPreviewView(wallpapers: [
-            Wallpaper(id: "1", name: "Aurora Dream", url: "https://images.pexels.com/photos/3225517/pexels-photo-3225517.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2", coin: 10),
-            Wallpaper(id: "2", name: "Crimson Peaks", url: "https://images.pexels.com/photos/2662116/pexels-photo-2662116.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2", coin: 15),
-            Wallpaper(id: "3", name: "Azure Depths", url: "https://images.pexels.com/photos/167699/pexels-photo-167699.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2", coin: 20),
-            Wallpaper(id: "4", name: "Forest Light", url: "https://images.pexels.com/photos/3408744/pexels-photo-3408744.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2", coin: 25)
+            Wallpaper(id: "1", name: "Aurora Dream", url: "https://res.cloudinary.com/dxmwaa0nv/image/upload/v1747080151/IMG_5167_d1d6ny.jpg", coin: 10),
+            Wallpaper(id: "2", name: "Crimson Peaks", url: "https://res.cloudinary.com/dxmwaa0nv/image/upload/v1746215697/IMG_5081_w5tbvj.jpg", coin: 15)
+            
         ])
     }
 }

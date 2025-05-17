@@ -11,7 +11,7 @@ struct WallpaperPreviewView: View {
 
     private var formattedTime: String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm"
+        formatter.dateFormat = "h:mm"
         return formatter.string(from: Date())
     }
 
@@ -155,7 +155,7 @@ struct WallpaperPreviewView: View {
                         // Overlay mimicking iPhone lock screen
                         VStack {
                             // Top: Day and Time
-                            VStack(spacing: 2) {
+                            VStack(spacing: -7) {
                                 Text(formattedDate)
                                     .font(.headline)
                                     .foregroundColor(.white)
@@ -163,7 +163,7 @@ struct WallpaperPreviewView: View {
                                     .font(.system(size: 80, weight: .bold, design: .default))
                                     .foregroundColor(.white)
                             }
-                            .padding(.top, 30)
+                            .padding(.top, 70)
 
                             Spacer()
 
@@ -173,9 +173,9 @@ struct WallpaperPreviewView: View {
                                     print("Flashlight tapped")
                                 }) {
                                     Image(systemName: "flashlight.on.fill")
-                                        .font(.title)
+                                        .font(.system(size: 18))
                                         .foregroundColor(.white)
-                                        .frame(width: 60, height: 60)
+                                        .frame(width: 44, height: 44)
                                         .background(Color.black.opacity(0.4))
                                         .clipShape(Circle())
                                 }
@@ -186,9 +186,9 @@ struct WallpaperPreviewView: View {
                                     print("Camera tapped")
                                 }) {
                                     Image(systemName: "camera.fill")
-                                        .font(.title)
+                                        .font(.system(size: 20))
                                         .foregroundColor(.white)
-                                        .frame(width: 60, height: 60)
+                                        .frame(width: 44, height: 44)
                                         .background(Color.black.opacity(0.4))
                                         .clipShape(Circle())
                                 }

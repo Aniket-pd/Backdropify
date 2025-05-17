@@ -77,6 +77,14 @@ struct WallpaperPreviewView: View {
                         animateSpotlight.toggle()
                     }
                 }
+                RadialGradient(
+                    gradient: Gradient(colors: [Color.white.opacity(0.1), Color.clear]),
+                    center: .bottomTrailing,
+                    startRadius: animateSpotlight ? 100 : 60,
+                    endRadius: animateSpotlight ? 600 : 400
+                )
+                .blendMode(.screen)
+                .ignoresSafeArea()
             }
 
             // The ScrollView is the main container for the horizontally scrolling wallpapers.
@@ -251,6 +259,18 @@ struct WallpaperPreviewView: View {
         .scrollBounceBehavior(.basedOnSize)
         }
         .toolbar(.hidden, for: .tabBar)
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: {
+                    dismiss()
+                }) {
+                    Image(systemName: "chevron.left")
+                        .font(.title2)
+                        .foregroundColor(.primary)
+                }
+            }
+        }
     }
 }
 

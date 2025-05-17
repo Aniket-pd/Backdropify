@@ -4,6 +4,7 @@ struct CollectionDetailView: View {
     let collection: WallpaperCollection
     @StateObject private var viewModel: WallpapersByCollectionViewModel
     @Environment(\.presentationMode) private var presentationMode
+    @State private var showFullScreenPreview = false
 
     init(collection: WallpaperCollection, viewModel: WallpapersByCollectionViewModel = WallpapersByCollectionViewModel()) {
         self.collection = collection
@@ -34,14 +35,15 @@ var body: some View {
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 20) {
                     ForEach(viewModel.wallpapers) { wallpaper in
-                        NavigationLink(destination: WallpaperPreviewView(wallpapers: viewModel.wallpapers)) {
-                            WallpaperCardView(wallpaper: wallpaper, showFavoriteButton: true)
-                        }
+                        WallpaperCardView(wallpaper: wallpaper, showFavoriteButton: true)
                     }
                 }
                 .padding(.top, 0)
                 .padding([.leading, .trailing])
             }
+        }
+        .fullScreenCover(isPresented: $showFullScreenPreview) {
+            WallpaperPreviewView(wallpapers: viewModel.wallpapers)
         }
         .background(Color(red: 20/255, green: 20/255, blue: 20/255).ignoresSafeArea())
         .onAppear {
@@ -71,6 +73,13 @@ var body: some View {
                     }
                     .foregroundColor(.white)
                     .font(.system(size: 16))
+                }
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: {
+                    showFullScreenPreview.toggle()
+                }) {
+                    Image(systemName: "iphone.and.arrow.forward")
                 }
             }
             ToolbarItem(placement: .navigationBarTrailing) {

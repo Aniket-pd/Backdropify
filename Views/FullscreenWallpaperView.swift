@@ -44,8 +44,10 @@ struct FullscreenWallpaperView: View {
 
                 Spacer()
 
-                // Bottom Bar Buttons
-                HStack(spacing: 40) {
+                // Bottom Bar Buttons  3 buttons
+                HStack {
+                    Spacer()
+
                     Button(action: {
                         print("Info button pressed")
                     }) {
@@ -54,6 +56,7 @@ struct FullscreenWallpaperView: View {
                                 .font(.title2)
                             Text("Info")
                         }
+                        .frame(maxWidth: .infinity)
                     }
 
                     Button(action: {
@@ -64,6 +67,7 @@ struct FullscreenWallpaperView: View {
                                 .font(.title2)
                             Text("Download")
                         }
+                        .frame(maxWidth: .infinity)
                     }
 
                     Button(action: {
@@ -74,10 +78,13 @@ struct FullscreenWallpaperView: View {
                                 .font(.title2)
                             Text("View")
                         }
+                        .frame(maxWidth: .infinity)
                     }
+
+                    Spacer()
                 }
-                .foregroundColor(.white)
-                .padding(.bottom, 30)
+                .foregroundColor(.white) // color of bottm 3 icons
+                .padding(.bottom, 10)
             }
         }
         .background(
@@ -112,7 +119,7 @@ struct FullscreenWallpaperView: View {
     let sampleWallpaper = Wallpaper(
         id: "sample",
         name: "Beautiful",
-        url: "https://picsum.photos/400/800",
+        url: "https://res.cloudinary.com/dxmwaa0nv/image/upload/v1747080151/IMG_5167_d1d6ny.jpg",
         coin: 15
     )
 

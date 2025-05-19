@@ -13,27 +13,6 @@ struct FullscreenWallpaperView: View {
 
     var body: some View {
         ZStack {
-            // Wallpaper Image
-            AsyncImage(url: URL(string: wallpaper.url)) { phase in
-                switch phase {
-                case .empty:
-                    ProgressView()
-                case .success(let image):
-                    image
-                        .resizable()
-                        .scaledToFill()
-                        .ignoresSafeArea()
-                case .failure:
-                    Image(systemName: "xmark.octagon")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 100, height: 100)
-                        .foregroundColor(.red)
-                @unknown default:
-                    EmptyView()
-                }
-            }
-
             // Top Bar (Back + Coin Info)
             VStack {
                 HStack {
@@ -101,6 +80,29 @@ struct FullscreenWallpaperView: View {
                 .padding(.bottom, 30)
             }
         }
+        .background(
+            AsyncImage(url: URL(string: wallpaper.url)) { phase in
+                switch phase {
+                case .empty:
+                    ProgressView()
+                case .success(let image):
+                    image
+                        .resizable()
+                        .scaledToFill()
+                        .ignoresSafeArea()
+                case .failure:
+                    Image(systemName: "xmark.octagon")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 100, height: 100)
+                        .foregroundColor(.red)
+                @unknown default:
+                    EmptyView()
+                }
+            }
+        )
+        .toolbar(.hidden, for: .tabBar)
+        .navigationBarBackButtonHidden(true)
     }
 }
 

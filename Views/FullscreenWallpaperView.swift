@@ -20,27 +20,35 @@ struct FullscreenWallpaperView: View {
                     Button(action: {
                         presentationMode.wrappedValue.dismiss()
                     }) {
-                        Image(systemName: "chevron.left")
+                        Image(systemName: "arrow.backward")
+                            .font(.system(size: 24))
                             .foregroundColor(.white)
+                            .shadow(color: .black.opacity(0.3), radius: 4, x: 0, y: 2)
+                        
                             .padding()
-                            .background(Color.black.opacity(0.5))
+                            //.background(Color.black.opacity(0.5))
                             .clipShape(Circle())
                     }
 
                     Spacer()
 
                     // Coin Display
-                    HStack(spacing: 4) {
-                        Image(systemName: "bitcoinsign.circle")
+                    HStack(spacing: 6) {
+                        Image("Coin")
+                            .resizable()
+                            .frame(width: 25, height: 19)
+                            .shadow(color: .black.opacity(0.3), radius: 4, x: 0, y: 2)
                         Text("\(wallpaper.coin)")
+                            .font(.system(size: 20))
+                            .shadow(color: .black.opacity(0.3), radius: 4, x: 0, y: 2)
                     }
                     .foregroundColor(.white)
                     .padding()
-                    .background(Color.black.opacity(0.5))
+                   // .background(Color.black.opacity(0.5))
                     .clipShape(Capsule())
                 }
                 .padding(.horizontal)
-                .padding(.top, 40) // For safe area
+                .padding(.top, 10) // For safe area
 
                 Spacer()
 
@@ -83,7 +91,8 @@ struct FullscreenWallpaperView: View {
 
                     Spacer()
                 }
-                .foregroundColor(.white) // color of bottm 3 icons
+                .foregroundColor(.white)
+                .padding(.horizontal)
                 .padding(.bottom, 10)
             }
         }

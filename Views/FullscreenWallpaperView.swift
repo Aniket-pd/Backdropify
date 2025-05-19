@@ -10,6 +10,8 @@ import SwiftUI
 struct FullscreenWallpaperView: View {
     let wallpaper: Wallpaper
     @Environment(\.presentationMode) private var presentationMode
+    @State private var showInfoSheet = false
+    var collectionName: String = "Abstract Art" // Example, ideally passed from parent
 
     var body: some View {
         ZStack {
@@ -57,7 +59,7 @@ struct FullscreenWallpaperView: View {
                     Spacer()
 
                     Button(action: {
-                        print("Info button pressed")
+                        showInfoSheet = true
                     }) {
                         VStack {
                             Image(systemName: "info.circle")
@@ -95,6 +97,62 @@ struct FullscreenWallpaperView: View {
                 .padding(.horizontal)
                 .padding(.bottom, 10)
             }
+        }
+        .sheet(isPresented: $showInfoSheet) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 20)
+                    .fill(.thinMaterial)
+                    .ignoresSafeArea()
+
+                VStack(spacing: 0) {
+                    VStack(spacing: 23) {
+                        HStack {
+                            Image(systemName: "info.circle")
+                            Text("Informations")
+                                .font(.system(size: 24, weight: .semibold))
+                        }
+                        .padding(.top, 30)
+                        .frame(maxWidth: .infinity)
+                        .multilineTextAlignment(.center)
+
+                        Divider()
+                            .frame(height: 0.3)
+                            .background(Color.gray)
+                            .padding(.horizontal)
+
+                        VStack(alignment: .leading, spacing: 20) {
+                            HStack {
+                                Image(systemName: "info.circle")
+                                Text(collectionName)
+                            }
+                            .font(.system(size: 16))
+
+                            HStack {
+                                Image(systemName: "info.circle")
+                                Text(wallpaper.name)
+                            }
+                            .font(.system(size: 16))
+
+                            HStack {
+                                Image("Coin")
+                                    .resizable()
+                                    .frame(width: 18, height: 14)
+                                Text("\(wallpaper.coin) coins")
+                            }
+                            .font(.system(size: 16))
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal, 44)
+                    }
+                    .padding(.top, 0)
+
+                    Spacer()
+                }
+            }
+            .presentationDetents([.height(253)])
+            //.presentationDragIndicator(.visible)
+            .presentationBackground(.ultraThinMaterial)
+            .presentationCornerRadius(30)
         }
         .background(
             AsyncImage(url: URL(string: wallpaper.url)) { phase in

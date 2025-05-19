@@ -35,7 +35,9 @@ var body: some View {
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 20) {
                     ForEach(viewModel.wallpapers) { wallpaper in
-                        WallpaperCardView(wallpaper: wallpaper, showFavoriteButton: true)
+                        NavigationLink(destination: FullscreenWallpaperView(wallpaper: wallpaper)) {
+                            WallpaperCardView(wallpaper: wallpaper, showFavoriteButton: true)
+                        }
                     }
                 }
                 .padding(.top, 0)
@@ -43,7 +45,19 @@ var body: some View {
             }
         }
         .fullScreenCover(isPresented: $showFullScreenPreview) {
-            WallpaperPreviewView(wallpapers: viewModel.wallpapers)
+            NavigationView {
+                WallpaperPreviewView(wallpapers: viewModel.wallpapers)
+                    .toolbar {
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            Button(action: {
+                                showFullScreenPreview = false
+                            }) {
+                                Image(systemName: "chevron.left")
+                                    .foregroundColor(.white)
+                            }
+                        }
+                    }
+            }
         }
         .background(Color(red: 20/255, green: 20/255, blue: 20/255).ignoresSafeArea())
         .onAppear {
@@ -79,7 +93,7 @@ var body: some View {
                 Button(action: {
                     showFullScreenPreview.toggle()
                 }) {
-                    Image(systemName: "iphone.and.arrow.forward")
+                    Image(systemName: "iphone.app.switcher")
                 }
             }
             ToolbarItem(placement: .navigationBarTrailing) {

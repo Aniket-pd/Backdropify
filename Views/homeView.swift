@@ -29,8 +29,8 @@ struct HomeView: View {
     //----------------------
     private let timer = Timer.publish(every: 5, on: .main, in: .common).autoconnect()
     private let imageNames = [
-        "Afuturisticneonlitstreeta_18295513",
-        "Naturescenelandscapeview_88300727",
+        "image",
+        "PreviewWallpaper",
         "photographyportraitofcontr_64338086 (1)"
     ]
     
@@ -48,7 +48,7 @@ struct HomeView: View {
                                 .tag(index)
                         }
                     }
-                    .modifier(StretchyHeaderViewModifier(startingHeight: UIScreen.main.bounds.height * 0.69))
+                    .modifier(StretchyHeaderViewModifier(startingHeight: UIScreen.main.bounds.height * 0.65))
                     .tabViewStyle(PageTabViewStyle(indexDisplayMode: .always))
                     .onReceive(timer) { _ in
                         withAnimation {
@@ -60,13 +60,13 @@ struct HomeView: View {
                         .fill(
                             LinearGradient(
                                 gradient: Gradient(colors: [Color.black.opacity(0), Color.black.opacity(0.5),
-                                                            Color.black.opacity(1)]),
+                                                            Color.black.opacity(0.75)]),
                                 startPoint: .top,
                                 endPoint: .bottom
                             )
                         )
-                        .frame(height: 150)
-                        .offset(y: 10)
+                        .frame(height: 260)
+                        .offset(y: 20)
                         .allowsHitTesting(false)
                 }
             
@@ -74,26 +74,34 @@ struct HomeView: View {
                 .font(.system(size: 20, weight: .semibold, design: .default))
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.leading)
-                .padding(.top, 10)
+                .padding(.leading, 21)
+                .padding(.top, 20)
             
-            LazyVStack(spacing: 30) {
+            LazyVGrid(columns: [GridItem(.fixed(169), spacing: 12), GridItem(.fixed(169), spacing: 12)], spacing: 12) {
                 ForEach(collectionsVM.collections) { collection in
                     NavigationLink(destination: CollectionDetailView(collection: collection)) {
-                        AsyncImage(url: URL(string: collection.url)) { image in
-                            image
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                        } placeholder: {
-                            ProgressView()
+                        ZStack(alignment: .bottomLeading) {
+                            AsyncImage(url: URL(string: collection.url)) { image in
+                                image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                            } placeholder: {
+                                ProgressView()
+                            }
+                            .frame(width: 169, height: 118)
+                            .clipped()
+                            .cornerRadius(14)
+
+                            Text(collection.name)
+                                .font(.system(size: 18, weight: .bold))
+                                .foregroundColor(.white)
+                                .padding(.leading, 16)
+                                .padding(.bottom, 15)
                         }
-                        .frame(height: 200)
-                        .clipped()
-                        .cornerRadius(20)
-                        .padding(.horizontal)
                     }
                 }
             }
+            .padding(.horizontal)
             .padding(.top, 10)
             }
             .coordinateSpace(name: "scroll")
@@ -116,10 +124,10 @@ struct HomeView: View {
                             .animation(.easeInOut(duration: 6), value: scrollOffset)
                             .ignoresSafeArea()
 
-                        Image("backdropify")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 130, height: 24)
+                        //Image("backdropify")
+                          //  .resizable()
+                            //.scaledToFit()
+                            //.frame(width: 130, height: 24)
                     }
                 }
             }

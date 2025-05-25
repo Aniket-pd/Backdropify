@@ -32,7 +32,7 @@ struct CollectionDetailView: View {
                     }
                 }
                 .padding([.leading, .trailing])
-                .padding(.top, 110) // so grid doesn't overlap the top bar
+                .padding(.top, 100) // so grid doesn't overlap the top bar
             }
 
             VStack(spacing: 0) {

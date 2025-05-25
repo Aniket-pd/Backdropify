@@ -116,21 +116,6 @@ struct HomeView: View {
             }
             .background(Color.black)
             .ignoresSafeArea()
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    ZStack {
-                        Color.black
-                            .opacity(scrollOffset < -300 ? 1 : 0)
-                            .animation(.easeInOut(duration: 6), value: scrollOffset)
-                            .ignoresSafeArea()
-
-                        //Image("backdropify")
-                          //  .resizable()
-                            //.scaledToFit()
-                            //.frame(width: 130, height: 24)
-                    }
-                }
-            }
         }
         .background(Color.black)
     }

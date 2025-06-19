@@ -10,11 +10,10 @@ struct ProfileView: View {
             ZStack {
                 HStack(spacing: 0) {
                     Text("Hey, ")
-                        .font(.custom("SF Pro Display", size: 36).weight(.bold))
-                        .foregroundColor(.white.opacity(0.75))
+                        .font(.system(size: 36, weight: .bold, design: .default))
 
                     Text(username)
-                        .font(.custom("SF Pro Display", size: 36).weight(.bold))
+                        .font(.system(size: 36, weight: .bold, design: .default))
                         .foregroundStyle(
                             LinearGradient(
                                 gradient: Gradient(colors: [
@@ -35,26 +34,27 @@ struct ProfileView: View {
             
             // MARK: - Menu Buttons
             ZStack {
-                RoundedRectangle(cornerRadius: 20)
-                    .fill(Color.gray.opacity(0.1))
-                    .frame(maxWidth: .infinity, maxHeight: 420)
-                
-                VStack(spacing: 8) {
+                VStack(spacing: 4) {
                     ProfileButton(label: "Purchase History", icon: "clock") {
                         print("purchase History")
                     }
+                    Divider().frame(height: 0.25).background(Color(red: 68/255, green: 68/255, blue: 68/255))
                     ProfileButton(label: "Coin History", icon: "banknote") {
                         print("purchase History")
                     }
+                    Divider().frame(height: 0.25).background(Color(red: 68/255, green: 68/255, blue: 68/255))
                     ProfileButton(label: "My Downloads", icon: "square.and.arrow.down.on.square") {
                         print("my download")
                     }
+                    Divider().frame(height: 0.25).background(Color(red: 68/255, green: 68/255, blue: 68/255))
                     ProfileButton(label: "Switch theme", icon: "circle.lefthalf.filled") {
                         print("Switch theme")
                     }
+                    Divider().frame(height: 0.25).background(Color(red: 68/255, green: 68/255, blue: 68/255))
                     ProfileButton(label: "Help & Support", icon: "questionmark.circle") {
                         print("help & support")
                     }
+                    Divider().frame(height: 0.25).background(Color(red: 68/255, green: 68/255, blue: 68/255))
                     ProfileButton(label: "Logout", icon: "rectangle.portrait.and.arrow.right", isLogout: true) {
                         print("logout")
                     }

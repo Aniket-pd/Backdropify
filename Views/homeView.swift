@@ -80,7 +80,10 @@ struct HomeView: View {
             
             LazyVGrid(columns: [GridItem(.fixed(169), spacing: 12), GridItem(.fixed(169), spacing: 12)], spacing: 12) {
                 ForEach(collectionsVM.collections) { collection in
-                    NavigationLink(destination: CollectionDetailView(collection: collection)) {
+                    NavigationLink(
+                        destination: CollectionDetailView(collection: collection)
+                            .transition(.move(edge: .bottom).combined(with: .opacity))
+                    ) {
                         ZStack(alignment: .bottomLeading) {
                             AsyncImage(url: URL(string: collection.url)) { image in
                                 image
@@ -99,6 +102,8 @@ struct HomeView: View {
                                 .padding(.leading, 16)
                                 .padding(.bottom, 15)
                         }
+                        .transition(.move(edge: .bottom).combined(with: .opacity))
+                        .animation(.easeInOut(duration: 2), value: showCollection)
                     }
                 }
             }

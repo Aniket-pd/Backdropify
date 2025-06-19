@@ -33,20 +33,22 @@ struct CustomTabView: View {
 
     var body: some View {
         ZStack(alignment: .bottom) {
-            Group {
-                switch selectedTab {
-                case 0:
+            ZStack {
+                if selectedTab == 0 {
                     HomeView()
-                case 1:
+                        .transition(.opacity)
+                } else if selectedTab == 1 {
                     FavoritesView()
-                case 2:
+                        .transition(.opacity)
+                } else if selectedTab == 2 {
                     CoinStoreView()
-                case 3:
+                        .transition(.opacity)
+                } else if selectedTab == 3 {
                     ProfileView()
-                default:
-                    HomeView()
+                        .transition(.opacity)
                 }
             }
+            .animation(.easeInOut(duration: 0.2), value: selectedTab)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(
                 ZStack {
@@ -86,6 +88,8 @@ struct CustomTabView: View {
     private func tabBarItem(icon: String, index: Int) -> some View {
         Button(action: {
             selectedTab = index
+            let generator = UISelectionFeedbackGenerator()
+            generator.selectionChanged()
         }) {
             Image(systemName: icon)
                 .font(.system(size: 23, weight: .regular))

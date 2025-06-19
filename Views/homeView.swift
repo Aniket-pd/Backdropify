@@ -29,9 +29,10 @@ struct HomeView: View {
     //----------------------
     private let timer = Timer.publish(every: 5, on: .main, in: .common).autoconnect()
     private let imageNames = [
-        "image",
+        "WALLP2 1",
         "PreviewWallpaper",
-        "photographyportraitofcontr_64338086 (1)"
+        "photographyportraitofcontr_64338086 (1)",
+        "WALLP4"
     ]
     
     var body: some View {

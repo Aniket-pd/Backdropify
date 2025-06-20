@@ -8,12 +8,14 @@ class FavoritesManager: ObservableObject {
     private init() {}
 
     func isFavorite(wallpaper: Wallpaper) -> Bool {
-        favorites.contains(where: { $0.id == wallpaper.id })
+        guard let id = wallpaper.id else { return false }
+        return favorites.contains { $0.id == id }
     }
 
     func toggleFavorite(wallpaper: Wallpaper) {
         if isFavorite(wallpaper: wallpaper) {
-            favorites.removeAll(where: { $0.id == wallpaper.id })
+            guard let id = wallpaper.id else { return }
+            favorites.removeAll { $0.id == id }
         } else {
             favorites.append(wallpaper)
         }

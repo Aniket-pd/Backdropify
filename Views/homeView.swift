@@ -17,10 +17,32 @@ struct OffsetObservingView: View {
     }
 }
 
+struct AnimatedCollectionDetailView: View {
+    let collection: WallpaperCollection
+    @Environment(\.accessibilityReduceMotion) var reduceMotion
+    @State private var animateIn = false
+
+    var body: some View {
+        CollectionDetailView(collection: collection)
+            .opacity(animateIn ? 1 : 0)
+            .blur(radius: animateIn ? 0 : 20)
+            .onAppear {
+                if reduceMotion {
+                    animateIn = true
+                } else {
+                    withAnimation(.easeInOut(duration: 0.4)) {
+                        animateIn = true
+                    }
+                }
+            }
+    }
+}
+
 struct HomeView: View {
     
     @State private var scrollOffset: CGFloat = 0
     @State private var currentIndex = 0
+    @State private var isBlurred = false
     //--------------
     @StateObject private var collectionsVM = WallpaperCollectionsViewModel()
     @State private var selectedCollection: WallpaperCollection?
@@ -37,91 +59,101 @@ struct HomeView: View {
     
     var body: some View {
         NavigationView {
-            ScrollView {
-                OffsetObservingView()
-                ZStack(alignment: .bottom) {
-                    TabView(selection: $currentIndex) {
-                        ForEach(0..<imageNames.count, id: \.self) { index in
-                            Image(imageNames[index])
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .clipped()
-                                .tag(index)
-                        }
-                    }
-                    .modifier(StretchyHeaderViewModifier(startingHeight: UIScreen.main.bounds.height * 0.65))
-                    .tabViewStyle(PageTabViewStyle(indexDisplayMode: .always))
-                    .onReceive(timer) { _ in
-                        withAnimation {
-                            currentIndex = (currentIndex + 1) % imageNames.count
-                        }
-                    }
-                    
-                    Rectangle()
-                        .fill(
-                            LinearGradient(
-                                gradient: Gradient(colors: [Color.black.opacity(0), Color.black.opacity(0.5),
-                                                            Color.black.opacity(0.75)]),
-                                startPoint: .top,
-                                endPoint: .bottom
-                            )
-                        )
-                        .frame(height: 260)
-                        .offset(y: 20)
-                        .allowsHitTesting(false)
-                }
-            
-            Text("Collection")
-                .font(.system(size: 20, weight: .semibold, design: .default))
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.leading, 21)
-                .padding(.top, 20)
-            
-            LazyVGrid(columns: [GridItem(.fixed(169), spacing: 12), GridItem(.fixed(169), spacing: 12)], spacing: 12) {
-                ForEach(collectionsVM.collections) { collection in
-                    NavigationLink(
-                        destination: CollectionDetailView(collection: collection)
-                            .transition(.move(edge: .bottom).combined(with: .opacity))
-                    ) {
-                        ZStack(alignment: .bottomLeading) {
-                            AsyncImage(url: URL(string: collection.url)) { image in
-                                image
+            ZStack {
+                ScrollView {
+                    OffsetObservingView()
+                    ZStack(alignment: .bottom) {
+                        TabView(selection: $currentIndex) {
+                            ForEach(0..<imageNames.count, id: \.self) { index in
+                                Image(imageNames[index])
                                     .resizable()
                                     .aspectRatio(contentMode: .fill)
-                            } placeholder: {
-                                ProgressView()
+                                    .clipped()
+                                    .tag(index)
                             }
-                            .frame(width: 169, height: 118)
-                            .clipped()
-                            .cornerRadius(14)
-
-                            Text(collection.name)
-                                .font(.system(size: 18, weight: .bold))
-                                .foregroundColor(.white)
-                                .padding(.leading, 16)
-                                .padding(.bottom, 15)
                         }
-                        .transition(.move(edge: .bottom).combined(with: .opacity))
-                        .animation(.easeInOut(duration: 2), value: showCollection)
+                        .modifier(StretchyHeaderViewModifier(startingHeight: UIScreen.main.bounds.height * 0.65))
+                        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .always))
+                        .onReceive(timer) { _ in
+                            withAnimation {
+                                currentIndex = (currentIndex + 1) % imageNames.count
+                            }
+                        }
+                        
+                        Rectangle()
+                            .fill(
+                                LinearGradient(
+                                    gradient: Gradient(colors: [Color.black.opacity(0), Color.black.opacity(0.5),
+                                                                Color.black.opacity(0.75)]),
+                                    startPoint: .top,
+                                    endPoint: .bottom
+                                )
+                            )
+                            .frame(height: 260)
+                            .offset(y: 20)
+                            .allowsHitTesting(false)
+                    }
+                
+                Text("Collection")
+                    .font(.system(size: 20, weight: .semibold, design: .default))
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.leading, 21)
+                    .padding(.top, 20)
+                
+                LazyVGrid(columns: [GridItem(.fixed(169), spacing: 12), GridItem(.fixed(169), spacing: 12)], spacing: 12) {
+                    ForEach(collectionsVM.collections) { collection in
+                        NavigationLink(
+                            destination: AnimatedCollectionDetailView(collection: collection)
+                        ) {
+                            ZStack(alignment: .bottomLeading) {
+                                AsyncImage(url: URL(string: collection.url)) { image in
+                                    image
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                } placeholder: {
+                                    ProgressView()
+                                }
+                                .frame(width: 169, height: 118)
+                                .clipped()
+                                .cornerRadius(14)
+
+                                Text(collection.name)
+                                    .font(.system(size: 18, weight: .bold))
+                                    .foregroundColor(.white)
+                                    .padding(.leading, 16)
+                                    .padding(.bottom, 15)
+                            }
+                            .transition(.opacity)
+                            .animation(.easeInOut(duration: 2), value: showCollection)
+                        }
+                        .simultaneousGesture(
+                            TapGesture().onEnded {
+                                isBlurred = true
+                            }
+                        )
                     }
                 }
-            }
-            .padding(.horizontal)
-            .padding(.top, 10)
-            }
-            .coordinateSpace(name: "scroll")
-            .onAppear {
-            
-                collectionsVM.fetchCollections()
-            }
-            .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
-                withAnimation(.easeInOut(duration: 6)) {
-                    scrollOffset = value
+                .padding(.horizontal)
+                .padding(.top, 10)
                 }
+                .blur(radius: isBlurred ? 20 : 0)
+                .animation(.easeInOut(duration: 0.3), value: isBlurred)
+                .coordinateSpace(name: "scroll")
+                .onAppear {
+                
+                    collectionsVM.fetchCollections()
+                    isBlurred = false
+                }
+                .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
+                    withAnimation(.easeInOut(duration: 6)) {
+                        scrollOffset = value
+                    }
+                }
+                .background(Color.black)
+                .ignoresSafeArea()
             }
             .background(Color.black)
-            .ignoresSafeArea()
         }
         .background(Color.black)
     }

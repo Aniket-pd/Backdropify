@@ -44,6 +44,7 @@ struct HomeView: View {
     @State private var scrollOffset: CGFloat = 0
     @State private var currentIndex = 0
     @State private var isBlurred = false
+    @State private var isImageLoaded = false
     //--------------
     @StateObject private var collectionsVM = WallpaperCollectionsViewModel()
     @State private var selectedCollection: WallpaperCollection?
@@ -108,15 +109,32 @@ struct HomeView: View {
                             destination: AnimatedCollectionDetailView(collection: collection)
                         ) {
                             ZStack(alignment: .bottomLeading) {
-                                AsyncImage(url: URL(string: collection.url)) { image in
-                                    image
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fill)
-                                } placeholder: {
-                                    RoundedRectangle(cornerRadius: 14)
-                                        .fill(Color.gray.opacity(0.3))
-                                        .redacted(reason: .placeholder)
-                                        .shimmering()
+                                AsyncImage(url: URL(string: collection.url)) { phase in
+                                    switch phase {
+                                    case .success(let image):
+                                        image
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fill)
+                                            .opacity(isImageLoaded ? 1 : 0)
+                                            .onAppear {
+                                                withAnimation(.easeInOut(duration: 0.3)) {
+                                                    isImageLoaded = true
+                                                }
+                                            }
+
+                                    case .failure(_):
+                                        Color.gray.opacity(0.3)
+                                            .cornerRadius(14)
+
+                                    case .empty:
+                                        RoundedRectangle(cornerRadius: 14)
+                                            .fill(Color.gray.opacity(0.3))
+                                            .redacted(reason: .placeholder)
+                                            .shimmering()
+
+                                    @unknown default:
+                                        EmptyView()
+                                    }
                                 }
                                 .frame(width: 169, height: 118)
                                 .clipped()

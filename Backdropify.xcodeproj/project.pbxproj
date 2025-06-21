@@ -15,6 +15,7 @@
 		E28AB2B92DA487B60039D703 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = E28AB2B82DA487B60039D703 /* FirebaseFirestore */; };
 		E28AB2BB2DA487B60039D703 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = E28AB2BA2DA487B60039D703 /* FirebaseStorage */; };
 		E28AB2D72DA641850039D703 /* WallpaperViewModel 2.swift in Sources */ = {isa = PBXBuildFile; fileRef = E28AB2D42DA641850039D703 /* WallpaperViewModel 2.swift */; };
+		E2E3DC3C2E070B1A008AED21 /* Shimmer in Frameworks */ = {isa = PBXBuildFile; productRef = E2E3DC3B2E070B1A008AED21 /* Shimmer */; };
 		E2F628B32DBACFE00072B770 /* WallpapersByCollectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F628B22DBACFD70072B770 /* WallpapersByCollectionViewModel.swift */; };
 		E2F628DB2DBD6C190072B770 /* FavoritesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F628DA2DBD6C090072B770 /* FavoritesManager.swift */; };
 /* End PBXBuildFile section */
@@ -53,6 +54,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E28AB2B52DA487B60039D703 /* FirebaseAnalytics in Frameworks */,
+				E2E3DC3C2E070B1A008AED21 /* Shimmer in Frameworks */,
 				E28AB2BB2DA487B60039D703 /* FirebaseStorage in Frameworks */,
 				E28AB2B72DA487B60039D703 /* FirebaseAuth in Frameworks */,
 				E28AB2B92DA487B60039D703 /* FirebaseFirestore in Frameworks */,
@@ -112,6 +114,7 @@
 				E28AB2B62DA487B60039D703 /* FirebaseAuth */,
 				E28AB2B82DA487B60039D703 /* FirebaseFirestore */,
 				E28AB2BA2DA487B60039D703 /* FirebaseStorage */,
+				E2E3DC3B2E070B1A008AED21 /* Shimmer */,
 			);
 			productName = Backdropify;
 			productReference = E28AB2CC2DA641850039D703 /* Backdropify.app */;
@@ -143,6 +146,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				E28AB2B32DA487B60039D703 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				E2E3DC3A2E070B1A008AED21 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = E28AB2882DA0876E0039D703;
@@ -390,6 +394,14 @@
 				minimumVersion = 11.11.0;
 			};
 		};
+		E2E3DC3A2E070B1A008AED21 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/markiv/SwiftUI-Shimmer";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.5.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -412,6 +424,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E28AB2B32DA487B60039D703 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseStorage;
+		};
+		E2E3DC3B2E070B1A008AED21 /* Shimmer */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E2E3DC3A2E070B1A008AED21 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */;
+			productName = Shimmer;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -1,4 +1,5 @@
 import SwiftUI
+import Shimmer
 
 struct ScrollOffsetPreferenceKey: PreferenceKey {
     static var defaultValue: CGFloat = 0
@@ -112,7 +113,10 @@ struct HomeView: View {
                                         .resizable()
                                         .aspectRatio(contentMode: .fill)
                                 } placeholder: {
-                                    ProgressView()
+                                    RoundedRectangle(cornerRadius: 14)
+                                        .fill(Color.gray.opacity(0.3))
+                                        .redacted(reason: .placeholder)
+                                        .shimmering()
                                 }
                                 .frame(width: 169, height: 118)
                                 .clipped()

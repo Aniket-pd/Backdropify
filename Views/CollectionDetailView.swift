@@ -5,6 +5,8 @@ struct CollectionDetailView: View {
     @StateObject private var viewModel: WallpapersByCollectionViewModel
     @Environment(\.presentationMode) private var presentationMode
     @State private var showFullScreenPreview = false
+    @Namespace private var animationNamespace
+    @State private var selectedWallpaper: Wallpaper? = nil
     
     init(collection: WallpaperCollection, viewModel: WallpapersByCollectionViewModel = WallpapersByCollectionViewModel()) {
         self.collection = collection
@@ -24,15 +26,51 @@ struct CollectionDetailView: View {
                 .ignoresSafeArea()
             
             ScrollView {
-                LazyVGrid(columns: columns, spacing: 20) {
-                    ForEach(viewModel.wallpapers) { wallpaper in
-                        NavigationLink(destination: FullscreenWallpaperView(wallpaper: wallpaper)) {
+                ZStack {
+                    LazyVGrid(columns: columns, spacing: 20) {
+                        ForEach(viewModel.wallpapers) { wallpaper in
+                            let isSelected = selectedWallpaper?.id == wallpaper.id
+                            
                             WallpaperCardView(wallpaper: wallpaper, showFavoriteButton: true)
+                                .matchedGeometryEffect(id: wallpaper.id, in: animationNamespace)
+                                .onTapGesture {
+                                    withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
+                                        selectedWallpaper = wallpaper
+                                    }
+                                }
+                                .opacity(isSelected ? 0 : 1)
                         }
                     }
+                    .padding([.leading, .trailing])
+                    .padding(.top, 100) // so grid doesn't overlap the top bar
+                    .blur(radius: selectedWallpaper != nil ? 20 : 0)
                 }
-                .padding([.leading, .trailing])
-                .padding(.top, 100) // so grid doesn't overlap the top bar
+            }
+            
+            if let selected = selectedWallpaper {
+                ZStack(alignment: .topTrailing) {
+                    Color.black.ignoresSafeArea()
+                    
+                    FullscreenWallpaperView(wallpaper: selected)
+                        .matchedGeometryEffect(id: selected.id, in: animationNamespace)
+                        .transition(.opacity)
+                        .gesture(
+                            DragGesture()
+                                .onEnded { value in
+                                    if value.translation.height > 100 {
+                                        withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
+                                            selectedWallpaper = nil
+                                        }
+                                    }
+                                }
+                        )
+                        .onTapGesture {
+                            withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
+                                selectedWallpaper = nil
+                            }
+                        }
+                }
+                .zIndex(1)
             }
 
             VStack(spacing: 0) {

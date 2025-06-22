@@ -34,7 +34,7 @@ struct CollectionDetailView: View {
                             WallpaperCardView(wallpaper: wallpaper, showFavoriteButton: true)
                                 .matchedGeometryEffect(id: wallpaper.id, in: animationNamespace)
                                 .onTapGesture {
-                                    withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
+                                    withAnimation(.easeInOut(duration: 0.45)) {
                                         selectedWallpaper = wallpaper
                                     }
                                 }
@@ -43,7 +43,10 @@ struct CollectionDetailView: View {
                     }
                     .padding([.leading, .trailing])
                     .padding(.top, 100) // so grid doesn't overlap the top bar
-                    .blur(radius: selectedWallpaper != nil ? 20 : 0)
+                    .overlay(
+                        Color.black.opacity(selectedWallpaper != nil ? 0.25 : 0)
+                            .animation(.easeInOut(duration: 0.3), value: selectedWallpaper != nil)
+                    )
                 }
             }
             
@@ -58,14 +61,14 @@ struct CollectionDetailView: View {
                             DragGesture()
                                 .onEnded { value in
                                     if value.translation.height > 100 {
-                                        withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
+                                        withAnimation(.easeOut(duration: 0.25)) {
                                             selectedWallpaper = nil
                                         }
                                     }
                                 }
                         )
                         .onTapGesture {
-                            withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
+                            withAnimation(.easeOut(duration: 0.25)) {
                                 selectedWallpaper = nil
                             }
                         }

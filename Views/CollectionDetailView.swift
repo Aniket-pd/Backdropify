@@ -7,6 +7,7 @@ struct CollectionDetailView: View {
     @State private var showFullScreenPreview = false
     @Namespace private var animationNamespace
     @State private var selectedWallpaper: Wallpaper? = nil
+    @State private var isFullscreenVisible = false
     
     init(collection: WallpaperCollection, viewModel: WallpapersByCollectionViewModel = WallpapersByCollectionViewModel()) {
         self.collection = collection
@@ -54,24 +55,34 @@ struct CollectionDetailView: View {
                 ZStack(alignment: .topTrailing) {
                     Color.black.ignoresSafeArea()
                     
-                    FullscreenWallpaperView(wallpaper: selected)
-                        .matchedGeometryEffect(id: selected.id, in: animationNamespace)
-                        .transition(.opacity)
-                        .gesture(
-                            DragGesture()
-                                .onEnded { value in
-                                    if value.translation.height > 100 {
-                                        withAnimation(.easeOut(duration: 0.25)) {
-                                            selectedWallpaper = nil
-                                        }
+                    Group {
+                        FullscreenWallpaperView(wallpaper: selected)
+                            .matchedGeometryEffect(id: selected.id, in: animationNamespace)
+                            .transition(.identity)
+                            .opacity(isFullscreenVisible ? 1 : 0)
+                    }
+                    .onAppear {
+                        withAnimation(.easeInOut(duration: 1.0).delay(0.4)) {
+                            isFullscreenVisible = true
+                        }
+                    }
+                    .gesture(
+                        DragGesture()
+                            .onEnded { value in
+                                if value.translation.height > 100 {
+                                    withAnimation(.easeOut(duration: 0.25)) {
+                                        isFullscreenVisible = false
+                                        selectedWallpaper = nil
                                     }
                                 }
-                        )
-                        .onTapGesture {
-                            withAnimation(.easeOut(duration: 0.25)) {
-                                selectedWallpaper = nil
                             }
+                    )
+                    .onTapGesture {
+                        withAnimation(.easeOut(duration: 0.25)) {
+                            isFullscreenVisible = false
+                            selectedWallpaper = nil
                         }
+                    }
                 }
                 .zIndex(1)
             }

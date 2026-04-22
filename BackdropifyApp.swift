@@ -10,6 +10,7 @@ import FirebaseCore
 @main
 struct BackdropifyApp: App {
     private let useStarterScaffold = ProcessInfo.processInfo.environment["BACKDROPIFY_STARTER"] == "1"
+    private let useLiquidGlassDemo = ProcessInfo.processInfo.environment["BACKDROPIFY_LIQUID_GLASS_DEMO"] == "1"
 
     init(){
         FirebaseApp.configure()
@@ -25,7 +26,18 @@ struct BackdropifyApp: App {
     
     var body: some Scene {
         WindowGroup{
-            if useStarterScaffold {
+            if useLiquidGlassDemo {
+                NavigationStack {
+                    FullscreenWallpaperView(
+                        wallpaper: Wallpaper(
+                            id: "liquid-glass-demo",
+                            name: "Liquid Glass Demo",
+                            url: "https://res.cloudinary.com/dxmwaa0nv/image/upload/v1747080151/IMG_5167_d1d6ny.jpg",
+                            coin: 20
+                        )
+                    )
+                }
+            } else if useStarterScaffold {
                 StarterAppView()
             } else {
                 CustomTabView()

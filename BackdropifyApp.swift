@@ -9,6 +9,8 @@ import SwiftUI
 import FirebaseCore
 @main
 struct BackdropifyApp: App {
+    private let useStarterScaffold = ProcessInfo.processInfo.environment["BACKDROPIFY_STARTER"] == "1"
+
     init(){
         FirebaseApp.configure()
         
@@ -23,7 +25,11 @@ struct BackdropifyApp: App {
     
     var body: some Scene {
         WindowGroup{
-            CustomTabView()
+            if useStarterScaffold {
+                StarterAppView()
+            } else {
+                CustomTabView()
+            }
         }
     }
 }

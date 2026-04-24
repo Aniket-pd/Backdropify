@@ -14,14 +14,6 @@ struct BackdropifyApp: App {
 
     init(){
         FirebaseApp.configure()
-        
-        let appearance = UITabBarAppearance()
-        appearance.configureWithTransparentBackground()
-        appearance.backgroundEffect = UIBlurEffect(style: .systemUltraThinMaterialDark)
-        appearance.backgroundColor = UIColor.black.withAlphaComponent(0.75)
-
-        UITabBar.appearance().standardAppearance = appearance
-        UITabBar.appearance().scrollEdgeAppearance = appearance
     }
     
     var body: some Scene {
@@ -40,96 +32,49 @@ struct BackdropifyApp: App {
             } else if useStarterScaffold {
                 StarterAppView()
             } else {
-                CustomTabView()
+                RootTabView()
             }
         }
     }
 }
 
-struct CustomTabView: View {
-    @State private var selectedTab = 0
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+struct RootTabView: View {
+    @State private var selectedTab: AppTab = .home
 
     var body: some View {
-        ZStack(alignment: .bottom) {
-            ZStack {
-                if selectedTab == 0 {
-                    HomeView()
-                        .transition(.opacity)
-                } else if selectedTab == 1 {
-                    FavoritesView()
-                        .transition(.opacity)
-                } else if selectedTab == 2 {
-                    CoinStoreView()
-                        .transition(.opacity)
-                } else if selectedTab == 3 {
-                    ProfileView()
-                        .transition(.opacity)
-                }
+        TabView(selection: $selectedTab) {
+            Tab("Home", systemImage: "house", value: .home) {
+                HomeView()
             }
-            .animation(reduceMotion ? nil : .easeInOut(duration: 0.2), value: selectedTab)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(
-                ZStack {
-                    Color.clear.background(.ultraThinMaterial)
-                    Color.black.opacity(0.75)
-                }
-                .ignoresSafeArea()
-            )
 
-            VStack(spacing: 0) {
-                Spacer()
-                HStack {
-                    Spacer()
-                    tabBarItem(icon: "house", index: 0)
-                    Spacer()
-                    tabBarItem(icon: "heart", index: 1)
-                    Spacer()
-                    tabBarItem(icon: "creditcard", index: 2)
-                    Spacer()
-                    tabBarItem(icon: "person.crop.circle", index: 3)
-                    Spacer()
-                }
-                .padding(.vertical, 25)
-                .background(
-                    ZStack {
-                        Color.clear.background(.ultraThinMaterial)
-                        Color.black.opacity(0.75)
-                    }
-                )
-                .shadow(color: Color.black.opacity(0.4), radius: 10, x: 0, y: -4)
-                .foregroundColor(.white)
+            Tab("Favorites", systemImage: "heart", value: .favorites) {
+                FavoritesView()
             }
-            .ignoresSafeArea(edges: .bottom)
-        }
-    }
 
-    private func tabBarItem(icon: String, index: Int) -> some View {
-        Button(action: {
-            selectedTab = index
-            let generator = UISelectionFeedbackGenerator()
-            generator.selectionChanged()
-        }) {
-            Image(systemName: icon)
-                .font(.system(size: 23, weight: .regular))
-                .foregroundColor(selectedTab == index ? .white : .gray)
-                .offset(y: -12)
+            Tab("Coin Store", systemImage: "creditcard", value: .coins) {
+                CoinStoreView()
+            }
+
+            Tab("Profile", systemImage: "person.crop.circle", value: .profile) {
+                ProfileView()
+            }
         }
+        .tabViewStyle(.tabBarOnly)
+        .toolbarBackground(.black, for: .tabBar)
+        .toolbarBackground(.visible, for: .tabBar)
+        .toolbarColorScheme(.dark, for: .tabBar)
+        .tint(.white)
+        .background(Color.black.ignoresSafeArea())
     }
 }
 
-struct VisualEffectBlur: UIViewRepresentable {
-    var blurStyle: UIBlurEffect.Style
-
-    func makeUIView(context: Context) -> UIVisualEffectView {
-        return UIVisualEffectView(effect: UIBlurEffect(style: blurStyle))
-    }
-
-    func updateUIView(_ uiView: UIVisualEffectView, context: Context) {
-        uiView.effect = UIBlurEffect(style: blurStyle)
-    }
+private enum AppTab: Hashable {
+    case home
+    case favorites
+    case coins
+    case profile
 }
 
 #Preview {
-    CustomTabView()
+    RootTabView()
 }

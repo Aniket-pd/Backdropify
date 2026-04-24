@@ -3,8 +3,7 @@ import SwiftUI
 struct CoinStoreView: View {
     // Example dynamic coin count variable
     @State private var coinCount: Int = 2555
-    @State private var shimmer: CGFloat = -1
-    @State private var displayedCoinCount: Int = 0
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         ZStack(alignment: .top) {
@@ -34,16 +33,15 @@ struct CoinStoreView: View {
                         //.padding(.leading, 30)
 
                     GeometryReader { geometry in
-                        Text("\(displayedCoinCount) coins")
+                        Text("\(coinCount) coins")
                             .font(.system(size: 50, weight: .heavy))
                             .foregroundColor(.white)
                             .shadow(color: .black.opacity(0.25), radius: 6, x: 1, y: 1)
                             .minimumScaleFactor(0.5)
                             .lineLimit(1)
                             .frame(maxWidth: geometry.size.width)
-                            .onAppear {
-                                animateCoinCount(to: coinCount)
-                            }
+                            .contentTransition(.numericText(value: Double(coinCount)))
+                            .animation(reduceMotion ? nil : .snappy(duration: 0.35), value: coinCount)
                     }
                     .frame(height: 70)
                     //.padding(.leading, 16)
@@ -93,13 +91,11 @@ struct CoinStoreView: View {
                                 )
                             ), cornerRadius: 10) {
                                 print("ad played")
-                                coinCount += 50
-                                animateCoinCount(to: coinCount)
+                                addCoins(50)
                             }
                             earnButton(icon: "clock", iconColor: .white, title: "Daily bonus", reward: "+10 coins", textColor: .white, background: AnyView(Color.gray.opacity(0.15)), cornerRadius: 10) {
                                 print("video watched")
-                                coinCount += 10
-                                animateCoinCount(to: coinCount)
+                                addCoins(10)
                             }
                         }
                     }
@@ -119,8 +115,7 @@ struct CoinStoreView: View {
     private func coinButton(coinAmount: Int, price: Int) -> some View {
         Button(action: {
             print("added \(coinAmount) coins")
-            coinCount += coinAmount
-            animateCoinCount(to: coinCount)
+            addCoins(coinAmount)
         }) {
             HStack {
                 
@@ -165,22 +160,8 @@ struct CoinStoreView: View {
         }
     }
 
-    private func animateCoinCount(to newCount: Int) {
-        shimmer = 1.5
-        let startCount = displayedCoinCount
-        let duration = 1.0
-        let steps = 60
-        let stepTime = duration / Double(steps)
-        var currentStep = 0
-        Timer.scheduledTimer(withTimeInterval: stepTime, repeats: true) { timer in
-            currentStep += 1
-            let progress = Double(currentStep) / Double(steps)
-            displayedCoinCount = Int(Double(startCount) + (Double(newCount - startCount) * progress))
-            if currentStep >= steps {
-                displayedCoinCount = newCount
-                timer.invalidate()
-            }
-        }
+    private func addCoins(_ amount: Int) {
+        coinCount += amount
     }
 }
 

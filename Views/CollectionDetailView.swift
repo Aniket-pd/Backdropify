@@ -7,7 +7,7 @@ struct CollectionDetailView: View {
     @State private var showFullScreenPreview = false
     @Namespace private var animationNamespace
     @State private var selectedWallpaper: Wallpaper? = nil
-    @State private var isFullscreenVisible = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     
     init(collection: WallpaperCollection, viewModel: WallpapersByCollectionViewModel = WallpapersByCollectionViewModel()) {
         self.collection = collection
@@ -34,19 +34,22 @@ struct CollectionDetailView: View {
                             
                             WallpaperCardView(wallpaper: wallpaper, showFavoriteButton: true)
                                 .matchedGeometryEffect(id: wallpaper.id, in: animationNamespace)
-                                .onTapGesture {
-                                    withAnimation(.easeInOut(duration: 0.45)) {
-                                        selectedWallpaper = wallpaper
-                                    }
-                                }
                                 .opacity(isSelected ? 0 : 1)
+                                .contentShape(RoundedRectangle(cornerRadius: 16))
+                                .onTapGesture {
+                                    select(wallpaper)
+                                }
+                                .accessibilityAddTraits(.isButton)
+                                .accessibilityAction {
+                                    select(wallpaper)
+                                }
                         }
                     }
                     .padding([.leading, .trailing])
                     .padding(.top, 100) // so grid doesn't overlap the top bar
                     .overlay(
                         Color.black.opacity(selectedWallpaper != nil ? 0.25 : 0)
-                            .animation(.easeInOut(duration: 0.3), value: selectedWallpaper != nil)
+                            .animation(wallpaperAnimation, value: selectedWallpaper != nil)
                     )
                 }
             }
@@ -59,29 +62,18 @@ struct CollectionDetailView: View {
                         FullscreenWallpaperView(wallpaper: selected)
                             .matchedGeometryEffect(id: selected.id, in: animationNamespace)
                             .transition(.identity)
-                            .opacity(isFullscreenVisible ? 1 : 0)
-                    }
-                    .onAppear {
-                        withAnimation(.easeInOut(duration: 1.0).delay(0.4)) {
-                            isFullscreenVisible = true
-                        }
+                            .opacity(selectedWallpaper == nil ? 0 : 1)
                     }
                     .gesture(
                         DragGesture()
                             .onEnded { value in
                                 if value.translation.height > 100 {
-                                    withAnimation(.easeOut(duration: 0.25)) {
-                                        isFullscreenVisible = false
-                                        selectedWallpaper = nil
-                                    }
+                                    dismissSelectedWallpaper()
                                 }
                             }
                     )
                     .onTapGesture {
-                        withAnimation(.easeOut(duration: 0.25)) {
-                            isFullscreenVisible = false
-                            selectedWallpaper = nil
-                        }
+                        dismissSelectedWallpaper()
                     }
                 }
                 .zIndex(1)
@@ -158,6 +150,22 @@ struct CollectionDetailView: View {
         }
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
+    }
+
+    private var wallpaperAnimation: Animation? {
+        reduceMotion ? nil : .smooth(duration: 0.35)
+    }
+
+    private func select(_ wallpaper: Wallpaper) {
+        withAnimation(wallpaperAnimation) {
+            selectedWallpaper = wallpaper
+        }
+    }
+
+    private func dismissSelectedWallpaper() {
+        withAnimation(wallpaperAnimation) {
+            selectedWallpaper = nil
+        }
     }
 }
     #Preview {

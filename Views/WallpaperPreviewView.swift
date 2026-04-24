@@ -9,6 +9,7 @@ import SwiftUI
 struct WallpaperPreviewView: View {
     let wallpapers: [Wallpaper]
     @Environment(\.dismiss) var dismiss
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var animateSpotlight = false
     @State private var selectedWallpaper: Wallpaper? = nil
 
@@ -50,6 +51,9 @@ struct WallpaperPreviewView: View {
     }
 
     var body: some View {
+        let motionIsReduced = reduceMotion
+        let carouselItemWidth = itemWidth
+
         ZStack {
             // More realistic light ray simulation using linear gradients
             ZStack {
@@ -70,24 +74,24 @@ struct WallpaperPreviewView: View {
                 RadialGradient(
                     gradient: Gradient(colors: [Color.white.opacity(0.1), Color.clear]),
                     center: .topLeading,
-                    startRadius: animateSpotlight ? 100 : 60,
-                    endRadius: animateSpotlight ? 600 : 400
+                    startRadius: reduceMotion || animateSpotlight ? 100 : 60,
+                    endRadius: reduceMotion || animateSpotlight ? 600 : 400
                 )
                 .blendMode(.screen)
                 .ignoresSafeArea()
                 .onAppear {
-                    withAnimation(.easeInOut(duration: 3).repeatForever(autoreverses: true)) {
-                        animateSpotlight.toggle()
-                    }
+                    animateSpotlight = true
                 }
+                .animation(reduceMotion ? nil : .easeInOut(duration: 3).repeatForever(autoreverses: true), value: animateSpotlight)
                 RadialGradient(
                     gradient: Gradient(colors: [Color.white.opacity(0.1), Color.clear]),
                     center: .bottomTrailing,
-                    startRadius: animateSpotlight ? 100 : 60,
-                    endRadius: animateSpotlight ? 600 : 400
+                    startRadius: reduceMotion || animateSpotlight ? 100 : 60,
+                    endRadius: reduceMotion || animateSpotlight ? 600 : 400
                 )
                 .blendMode(.screen)
                 .ignoresSafeArea()
+                .animation(reduceMotion ? nil : .easeInOut(duration: 3).repeatForever(autoreverses: true), value: animateSpotlight)
             }
 
             // The ScrollView is the main container for the horizontally scrolling wallpapers.
@@ -223,7 +227,7 @@ struct WallpaperPreviewView: View {
                             // Scale: Center item is 1.0, others scale down.
                             // abs(phase.value) is 0 at center, 1 at the edge of transition.
                             // 0.2 factor means side items scale down to 80% (1.0 - 0.2).
-                            .scaleEffect(1.0 - abs(phase.value) * 0.2)
+                            .scaleEffect(motionIsReduced ? 1 : 1.0 - abs(phase.value) * 0.2)
                             // Opacity: Center item is fully opaque, others fade.
                             // 0.3 factor means side items fade to 70% opacity (1.0 - 0.3).
                             .opacity(1.0 - abs(phase.value) * 0.3)
@@ -232,7 +236,7 @@ struct WallpaperPreviewView: View {
                             // Negative value often gives a pleasing perspective.
                             // anchor: Changes the anchor point of rotation for a more dynamic feel.
                             .rotation3DEffect(
-                                .degrees(phase.value * -30),
+                                .degrees(motionIsReduced ? 0 : phase.value * -30),
                                 axis: (x: 0, y: 1, z: 0),
                                 anchor: phase.value < 0 ? .leading : .trailing, // Rotates away from the direction of movement
                                 perspective: 0.3 // Adds a subtle perspective
@@ -240,7 +244,7 @@ struct WallpaperPreviewView: View {
                             // Horizontal Offset: Creates a slight "tucked in" or perspective effect.
                             // Moves items horizontally based on their phase.
                             // itemWidth / 8: Adjust this divisor to control the magnitude of the offset.
-                            .offset(x: phase.value * (itemWidth / -8)) // Negative offset for a slight "pull" effect
+                            .offset(x: motionIsReduced ? 0 : phase.value * (carouselItemWidth / -8)) // Negative offset for a slight "pull" effect
                     }
                 }
             }

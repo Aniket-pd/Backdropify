@@ -48,6 +48,7 @@ struct BackdropifyApp: App {
 
 struct CustomTabView: View {
     @State private var selectedTab = 0
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -66,7 +67,7 @@ struct CustomTabView: View {
                         .transition(.opacity)
                 }
             }
-            .animation(.easeInOut(duration: 0.2), value: selectedTab)
+            .animation(reduceMotion ? nil : .easeInOut(duration: 0.2), value: selectedTab)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(
                 ZStack {

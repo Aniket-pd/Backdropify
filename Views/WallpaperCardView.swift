@@ -43,14 +43,12 @@ struct WallpaperCardView: View {
 
                         if showFavoriteButton {
                             Button(action: {
-                                withAnimation {
-                                    let isNowFavorite = !favoritesManager.isFavorite(wallpaper: wallpaper)
-                                    favoritesManager.toggleFavorite(wallpaper: wallpaper)
-                                    animateHeart.toggle()
-                                    if isNowFavorite {
-                                        let generator = UINotificationFeedbackGenerator()
-                                        generator.notificationOccurred(.success)
-                                    }
+                                let isNowFavorite = !favoritesManager.isFavorite(wallpaper: wallpaper)
+                                favoritesManager.toggleFavorite(wallpaper: wallpaper)
+                                animateHeart.toggle()
+                                if isNowFavorite {
+                                    let generator = UINotificationFeedbackGenerator()
+                                    generator.notificationOccurred(.success)
                                 }
                             }) {
                                 Image(systemName: favoritesManager.isFavorite(wallpaper: wallpaper) ? "heart.fill" : "heart")

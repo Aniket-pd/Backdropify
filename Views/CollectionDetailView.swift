@@ -102,20 +102,11 @@ struct CollectionDetailView: View {
 
                     Spacer()
 
-                    HStack(spacing: 16) {
-                        Button(action: {
-                            showFullScreenPreview = true
-                        }) {
-                            Image(systemName: "rectangle.stack.fill")
-                                .foregroundColor(.white)
-                        }
-
-                        HStack(spacing: 4) {
-                            Image(systemName: "bitcoinsign.circle.fill")
-                                .foregroundColor(.white)
-                            Text("999") // dummy value
-                                .foregroundColor(.white)
-                        }
+                    Button(action: {
+                        showFullScreenPreview = true
+                    }) {
+                        Image(systemName: "rectangle.stack.fill")
+                            .foregroundColor(.white)
                     }
                     .padding(.trailing, 24)
                     
@@ -135,16 +126,12 @@ struct CollectionDetailView: View {
         }
         .onAppear {
             if ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] != "1" {
-                if let collectionID = collection.id {
-                    viewModel.fetchWallpapers(from: collectionID)
-                    print("Fetching wallpapers from: \(collectionID)")
-                } else {
-                    print("Collection ID is nil")
-                }
+                viewModel.fetchWallpapers(from: collection.id)
+                print("Fetching wallpapers from: \(collection.id)")
             }
         }
         .fullScreenCover(isPresented: $showFullScreenPreview) {
-            NavigationView {
+            NavigationStack {
                 WallpaperPreviewView(wallpapers: viewModel.wallpapers)
             }
         }
@@ -176,14 +163,14 @@ struct CollectionDetailView: View {
     )
 
     let dummyWallpapers = [
-        Wallpaper(id: "1", name: "ap", url: "https://res.cloudinary.com/dxmwaa0nv/image/upload/v1745576498/illustrationatmosphericimag_71073153_iuoaql.png", coin: 10),
-        Wallpaper(id: "2", name: "ogo", url: "https://picsum.photos/200/301", coin: 20)
+        Wallpaper(id: "1", name: "ap", url: "https://res.cloudinary.com/dxmwaa0nv/image/upload/v1745576498/illustrationatmosphericimag_71073153_iuoaql.png"),
+        Wallpaper(id: "2", name: "ogo", url: "https://picsum.photos/200/301")
     ]
 
     let viewModel = WallpapersByCollectionViewModel()
     viewModel.wallpapers = dummyWallpapers
 
-    return NavigationView {
+    return NavigationStack {
         CollectionDetailView(collection: sampleCollection, viewModel: viewModel)
     }
 }

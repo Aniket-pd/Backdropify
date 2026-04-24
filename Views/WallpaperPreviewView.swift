@@ -304,8 +304,8 @@ struct WallpaperPreviewView_Previews: PreviewProvider {
         // Using diverse and actual image URLs will make the preview more representative.
         // Ensure these URLs are accessible. Consider using placeholder services if actual URLs are unstable for previews.
         WallpaperPreviewView(wallpapers: [
-            Wallpaper(id: "1", name: "Aurora Dream", url: "https://res.cloudinary.com/dxmwaa0nv/image/upload/v1747080151/IMG_5167_d1d6ny.jpg", coin: 10),
-            Wallpaper(id: "2", name: "Crimson Peaks", url: "https://res.cloudinary.com/dxmwaa0nv/image/upload/v1746215697/IMG_5081_w5tbvj.jpg", coin: 15)
+            Wallpaper(id: "1", name: "Aurora Dream", url: "https://res.cloudinary.com/dxmwaa0nv/image/upload/v1747080151/IMG_5167_d1d6ny.jpg"),
+            Wallpaper(id: "2", name: "Crimson Peaks", url: "https://res.cloudinary.com/dxmwaa0nv/image/upload/v1746215697/IMG_5081_w5tbvj.jpg")
             
         ])
     }

@@ -27,18 +27,6 @@ struct WallpaperCardView: View {
                 .frame(width: 166, height: 40)
                 .overlay(
                     HStack {
-                        HStack(spacing: 4) {
-                            Image("Coin")
-                                .resizable()
-                                .renderingMode(.template)
-                                .foregroundColor(.white)
-                                .frame(width: 12, height: 9)
-                            Text("\(wallpaper.coin)")
-                                .foregroundColor(.white)
-                                .font(.system(size: 13, weight: .semibold))
-                        }
-                        .padding(.leading, 15)
-
                         Spacer()
 
                         if showFavoriteButton {
@@ -108,8 +96,7 @@ extension Color {
         wallpaper: Wallpaper(
             id: "sample-id",
             name: "Sample Wallpaper",
-            url: "https://res.cloudinary.com/dxmwaa0nv/image/upload/v1745576498/illustrationatmosphericimag_71073153_iuoaql.png", // 🖼 sample random image URL
-            coin: 10
+            url: "https://res.cloudinary.com/dxmwaa0nv/image/upload/v1745576498/illustrationatmosphericimag_71073153_iuoaql.png" // 🖼 sample random image URL
         ),
         showFavoriteButton: true
     )

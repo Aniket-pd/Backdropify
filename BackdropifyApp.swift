@@ -24,8 +24,7 @@ struct BackdropifyApp: App {
                         wallpaper: Wallpaper(
                             id: "liquid-glass-demo",
                             name: "Liquid Glass Demo",
-                            url: "https://res.cloudinary.com/dxmwaa0nv/image/upload/v1747080151/IMG_5167_d1d6ny.jpg",
-                            coin: 20
+                            url: "https://res.cloudinary.com/dxmwaa0nv/image/upload/v1747080151/IMG_5167_d1d6ny.jpg"
                         )
                     )
                 }
@@ -51,10 +50,6 @@ struct RootTabView: View {
                 FavoritesView()
             }
 
-            Tab("Coin Store", systemImage: "creditcard", value: .coins) {
-                CoinStoreView()
-            }
-
             Tab("Profile", systemImage: "person.crop.circle", value: .profile) {
                 ProfileView()
             }
@@ -71,7 +66,6 @@ struct RootTabView: View {
 private enum AppTab: Hashable {
     case home
     case favorites
-    case coins
     case profile
 }
 

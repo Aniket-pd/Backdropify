@@ -1,7 +1,8 @@
 import SwiftUI
 
 struct HomeView: View {
-    
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Namespace private var collectionZoomNamespace
     @State private var currentIndex = 0
     //--------------
     @StateObject private var collectionsVM = WallpaperCollectionsViewModel()
@@ -15,7 +16,7 @@ struct HomeView: View {
     ]
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ZStack {
                 ScrollView {
                     ZStack(alignment: .bottom) {
@@ -30,7 +31,7 @@ struct HomeView: View {
                         }
                         .modifier(StretchyHeaderViewModifier(startingHeight: UIScreen.main.bounds.height * 0.65))
                         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .always))
-                        
+
                         Rectangle()
                             .fill(
                                 LinearGradient(
@@ -44,68 +45,85 @@ struct HomeView: View {
                             .offset(y: 20)
                             .allowsHitTesting(false)
                     }
-                
-                Text("Collection")
-                    .font(.system(size: 20, weight: .semibold, design: .default))
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.leading, 21)
-                    .padding(.top, 20)
-                
-                LazyVGrid(columns: [GridItem(.fixed(169), spacing: 12), GridItem(.fixed(169), spacing: 12)], spacing: 12) {
-                    ForEach(collectionsVM.collections) { collection in
-                        NavigationLink(
-                            destination: CollectionDetailView(collection: collection)
-                        ) {
-                            ZStack(alignment: .bottomLeading) {
-                                AsyncImage(url: URL(string: collection.url)) { phase in
-                                    switch phase {
-                                    case .success(let image):
-                                        image
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fill)
-                                            .contentTransition(.opacity)
 
-                                    case .failure(_):
-                                        Color.gray.opacity(0.3)
-                                            .cornerRadius(14)
+                    Text("Collection")
+                        .font(.system(size: 20, weight: .semibold, design: .default))
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.leading, 21)
+                        .padding(.top, 20)
 
-                                    case .empty:
-                                        RoundedRectangle(cornerRadius: 14)
-                                            .fill(Color.gray.opacity(0.3))
-                                            .redacted(reason: .placeholder)
-
-                                    @unknown default:
-                                        EmptyView()
-                                    }
-                                }
-                                .frame(width: 169, height: 118)
-                                .clipped()
-                                .cornerRadius(14)
-
-                                Text(collection.name)
-                                    .font(.system(size: 18, weight: .bold))
-                                    .foregroundColor(.white)
-                                    .padding(.leading, 16)
-                                    .padding(.bottom, 15)
+                    LazyVGrid(columns: [GridItem(.fixed(169), spacing: 12), GridItem(.fixed(169), spacing: 12)], spacing: 12) {
+                        ForEach(collectionsVM.collections) { collection in
+                            NavigationLink(value: collection) {
+                                collectionCard(collection)
                             }
-                            .transition(.opacity)
+                            .buttonStyle(.plain)
+                            .matchedTransitionSource(id: collection.id, in: collectionZoomNamespace) { source in
+                                source
+                                    .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+                                    .shadow(color: .black.opacity(0.28), radius: 12, x: 0, y: 6)
+                            }
                         }
                     }
-                }
-                .padding(.horizontal)
-                .padding(.top, 10)
+                    .padding(.horizontal)
+                    .padding(.top, 10)
                 }
                 .onAppear {
-                
                     collectionsVM.fetchCollections()
                 }
                 .background(Color.black)
                 .ignoresSafeArea()
             }
             .background(Color.black)
+            .navigationDestination(for: WallpaperCollection.self) { collection in
+                if reduceMotion {
+                    CollectionDetailView(collection: collection)
+                        .navigationTransition(.automatic)
+                } else {
+                    CollectionDetailView(collection: collection)
+                        .navigationTransition(.zoom(sourceID: collection.id, in: collectionZoomNamespace))
+                }
+            }
         }
         .background(Color.black)
+    }
+
+    private func collectionCard(_ collection: WallpaperCollection) -> some View {
+        ZStack(alignment: .bottomLeading) {
+            AsyncImage(url: URL(string: collection.url)) { phase in
+                switch phase {
+                case .success(let image):
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .contentTransition(.opacity)
+
+                case .failure(_):
+                    Color.gray.opacity(0.3)
+                        .cornerRadius(14)
+
+                case .empty:
+                    RoundedRectangle(cornerRadius: 14)
+                        .fill(Color.gray.opacity(0.3))
+                        .redacted(reason: .placeholder)
+
+                @unknown default:
+                    EmptyView()
+                }
+            }
+            .frame(width: 169, height: 118)
+            .clipped()
+            .cornerRadius(14)
+
+            Text(collection.name)
+                .font(.system(size: 18, weight: .bold))
+                .foregroundColor(.white)
+                .padding(.leading, 16)
+                .padding(.bottom, 15)
+        }
+        .frame(width: 169, height: 118)
+        .transition(.opacity)
     }
 }
 

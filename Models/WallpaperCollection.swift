@@ -6,9 +6,8 @@
 //
 import Foundation
 
-struct WallpaperCollection: Identifiable {
-    var id: String?            // Firestore document ID
-    var name: String            // Display name (e.g., "Nature")
-    var url: String    // Thumbnail image URL
-    
+struct WallpaperCollection: Identifiable, Hashable, Codable {
+    var id: String
+    var name: String
+    var url: String
 }

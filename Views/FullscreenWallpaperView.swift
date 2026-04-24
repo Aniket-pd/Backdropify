@@ -10,8 +10,6 @@ import SwiftUI
 struct DownloadOption {
     let title: String
     let iconName: String
-    let coinAmount: Int
-    let showPlus: Bool
     let isPrimary: Bool
     let action: () -> Void
 }
@@ -68,8 +66,6 @@ struct FullscreenWallpaperView: View {
             dismissButton
 
             Spacer()
-
-            coinChip
         }
     }
 
@@ -84,23 +80,6 @@ struct FullscreenWallpaperView: View {
                 .shadow(color: .black.opacity(0.2), radius: 2, x: 0, y: 1)
         }
         .liquidGlassButton(prominent: false)
-    }
-
-    private var coinChip: some View {
-        HStack(spacing: 6) {
-            Image("Coin")
-                .resizable()
-                .frame(width: 25, height: 19)
-                .shadow(color: .black.opacity(0.2), radius: 2, x: 0, y: 1)
-
-            Text("\(wallpaper.coin)")
-                .font(.system(size: 20, weight: .semibold))
-                .shadow(color: .black.opacity(0.2), radius: 2, x: 0, y: 1)
-        }
-        .foregroundColor(.white)
-        .padding(.horizontal, 14)
-        .padding(.vertical, 10)
-        .liquidGlassSurface(interactive: false, shape: .capsule)
     }
 
     private var bottomActionBar: some View {
@@ -172,13 +151,6 @@ struct FullscreenWallpaperView: View {
                             Image(systemName: "photo")
                             Text(wallpaper.name)
                         }
-
-                        HStack {
-                            Image("Coin")
-                                .resizable()
-                                .frame(width: 18, height: 14)
-                            Text("\(wallpaper.coin) coins")
-                        }
                     }
                     .font(.system(size: 16))
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -199,14 +171,11 @@ struct FullscreenWallpaperView: View {
 
     private var downloadSheet: some View {
         let downloadOptions: [DownloadOption] = [
-            DownloadOption(title: "Download [HD]", iconName: "arrow.down.to.line", coinAmount: wallpaper.coin, showPlus: false, isPrimary: false, action: {
+            DownloadOption(title: "Download [HD]", iconName: "arrow.down.to.line", isPrimary: false, action: {
                 print("Download HD button pressed")
             }),
-            DownloadOption(title: "Download [4K]", iconName: "arrow.down.to.line", coinAmount: wallpaper.coin, showPlus: false, isPrimary: false, action: {
+            DownloadOption(title: "Download [4K]", iconName: "arrow.down.to.line", isPrimary: false, action: {
                 print("Download 4K button pressed")
-            }),
-            DownloadOption(title: "Watch Ad", iconName: "play.rectangle", coinAmount: 70, showPlus: true, isPrimary: true, action: {
-                print("Watch Ad button pressed")
             })
         ]
 
@@ -284,24 +253,6 @@ struct FullscreenWallpaperView: View {
                                 .font(.system(size: 20))
                             Text(option.title)
                                 .font(.system(size: 18, weight: .bold))
-                        }
-
-                        Spacer()
-
-                        HStack(spacing: 6) {
-                            if option.showPlus {
-                                Text("+")
-                                    .font(.system(size: 14, weight: .bold))
-                            }
-
-                            Image("Coin")
-                                .resizable()
-                                .renderingMode(.template)
-                                .foregroundColor(.black)
-                                .frame(width: 18, height: 14)
-
-                            Text("\(option.coinAmount)")
-                                .font(.system(size: 14, weight: .bold))
                         }
                     }
                     .padding(.horizontal, 22)
@@ -387,8 +338,7 @@ private extension View {
     let sampleWallpaper = Wallpaper(
         id: "sample",
         name: "Beautiful",
-        url: "https://res.cloudinary.com/dxmwaa0nv/image/upload/v1747080151/IMG_5167_d1d6ny.jpg",
-        coin: 15
+        url: "https://res.cloudinary.com/dxmwaa0nv/image/upload/v1747080151/IMG_5167_d1d6ny.jpg"
     )
 
     return FullscreenWallpaperView(wallpaper: sampleWallpaper)

@@ -2,8 +2,6 @@ import SwiftUI
 
 struct ProfileView: View {
     @State private var username: String = "Aniket  "
-    @State private var coins: Int = 233
-    @State private var downloadedWallpapers: Int = 43
 
     var body: some View {
         VStack(spacing: 50) {
@@ -35,14 +33,6 @@ struct ProfileView: View {
             // MARK: - Menu Buttons
             ZStack {
                 VStack(spacing: 4) {
-                    ProfileButton(label: "Purchase History", icon: "clock") {
-                        print("purchase History")
-                    }
-                    Divider().frame(height: 0.25).background(Color(red: 68/255, green: 68/255, blue: 68/255))
-                    ProfileButton(label: "Coin History", icon: "banknote") {
-                        print("purchase History")
-                    }
-                    Divider().frame(height: 0.25).background(Color(red: 68/255, green: 68/255, blue: 68/255))
                     ProfileButton(label: "My Downloads", icon: "square.and.arrow.down.on.square") {
                         print("my download")
                     }

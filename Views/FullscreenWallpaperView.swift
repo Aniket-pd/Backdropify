@@ -26,104 +26,39 @@ struct FullscreenWallpaperView: View {
     var body: some View {
         ZStack {
             wallpaperBackground
-
-            VStack {
-                topBar
-                    .padding(.horizontal)
-                    .padding(.top, 10)
-
-                Spacer()
-
-                bottomActionBar
-                    .padding(.horizontal)
-                    .padding(.bottom, 10)
-            }
         }
+        .ignoresSafeArea()
         .sheet(isPresented: $showInfoSheet) {
             infoSheet
         }
         .sheet(isPresented: $showDownloadSheet) {
             downloadSheet
         }
+        .toolbar {
+            ToolbarItemGroup(placement: .bottomBar) {
+                Button(action: {
+                    showInfoSheet = true
+                }) {
+                    Image(systemName: "info.circle")
+                }
+
+                Button(action: {
+                    showDownloadSheet = true
+                }) {
+                    Image(systemName: "arrow.down.circle")
+                }
+
+                Button(action: {
+                    print("View button pressed")
+                }) {
+                    Image(systemName: "eye.circle")
+                }
+            }
+        }
         .toolbar(.hidden, for: .tabBar)
         .navigationBarBackButtonHidden(true)
     }
 
-    private var topBar: some View {
-        Group {
-            if #available(iOS 26, *) {
-                GlassEffectContainer(spacing: 24) {
-                    topBarContent
-                }
-            } else {
-                topBarContent
-            }
-        }
-    }
-
-    private var topBarContent: some View {
-        HStack {
-            dismissButton
-
-            Spacer()
-        }
-    }
-
-    private var dismissButton: some View {
-        Button(action: {
-            dismiss()
-        }) {
-            Image(systemName: "arrow.backward")
-                .font(.system(size: 22, weight: .semibold))
-                .foregroundColor(.white)
-                .frame(width: 46, height: 46)
-                .shadow(color: .black.opacity(0.2), radius: 2, x: 0, y: 1)
-        }
-        .liquidGlassButton(prominent: false)
-    }
-
-    private var bottomActionBar: some View {
-        Group {
-            if #available(iOS 26, *) {
-                GlassEffectContainer(spacing: 14) {
-                    bottomActionBarContent
-                }
-            } else {
-                bottomActionBarContent
-            }
-        }
-    }
-
-    private var bottomActionBarContent: some View {
-        HStack(spacing: 12) {
-            flowActionButton(title: "Info", iconName: "info.circle", prominent: false) {
-                showInfoSheet = true
-            }
-
-            flowActionButton(title: "Download", iconName: "arrow.down.circle", prominent: true) {
-                showDownloadSheet = true
-            }
-
-            flowActionButton(title: "View", iconName: "eye.circle", prominent: false) {
-                print("View button pressed")
-            }
-        }
-    }
-
-    private func flowActionButton(title: String, iconName: String, prominent: Bool, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            VStack(spacing: 5) {
-                Image(systemName: iconName)
-                    .font(.title3)
-                Text(title)
-                    .font(.subheadline.weight(.semibold))
-            }
-            .frame(maxWidth: .infinity)
-            .frame(height: 56)
-            .foregroundColor(.white)
-        }
-        .liquidGlassButton(prominent: prominent)
-    }
 
     private var infoSheet: some View {
         ZStack {
@@ -228,7 +163,7 @@ struct FullscreenWallpaperView: View {
                 image
                     .resizable()
                     .scaledToFill()
-                    .ignoresSafeArea()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
             case .failure:
                 Image(systemName: "xmark.octagon")
                     .resizable()

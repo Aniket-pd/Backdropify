@@ -3,10 +3,10 @@ import SwiftUI
 struct CollectionDetailView: View {
     let collection: WallpaperCollection
     @StateObject private var viewModel: WallpapersByCollectionViewModel
-    @Environment(\.presentationMode) private var presentationMode
+    @Environment(\.dismiss) private var dismiss
     @State private var showFullScreenPreview = false
-    @Namespace private var animationNamespace
-    @State private var selectedWallpaper: Wallpaper? = nil
+    @State private var animatingFavoriteWallpaperID: String?
+    @Namespace private var wallpaperZoomNamespace
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     
     init(collection: WallpaperCollection, viewModel: WallpapersByCollectionViewModel = WallpapersByCollectionViewModel()) {
@@ -27,62 +27,19 @@ struct CollectionDetailView: View {
                 .ignoresSafeArea()
             
             ScrollView {
-                ZStack {
-                    LazyVGrid(columns: columns, spacing: 20) {
-                        ForEach(viewModel.wallpapers) { wallpaper in
-                            let isSelected = selectedWallpaper?.id == wallpaper.id
-                            
-                            WallpaperCardView(wallpaper: wallpaper, showFavoriteButton: true)
-                                .matchedGeometryEffect(id: wallpaper.id, in: animationNamespace)
-                                .opacity(isSelected ? 0 : 1)
-                                .contentShape(RoundedRectangle(cornerRadius: 16))
-                                .onTapGesture {
-                                    select(wallpaper)
-                                }
-                                .accessibilityAddTraits(.isButton)
-                                .accessibilityAction {
-                                    select(wallpaper)
-                                }
-                        }
-                    }
-                    .padding([.leading, .trailing])
-                    .padding(.top, 100) // so grid doesn't overlap the top bar
-                    .overlay(
-                        Color.black.opacity(selectedWallpaper != nil ? 0.25 : 0)
-                            .animation(wallpaperAnimation, value: selectedWallpaper != nil)
-                    )
-                }
-            }
-            
-            if let selected = selectedWallpaper {
-                ZStack(alignment: .topTrailing) {
-                    Color.black.ignoresSafeArea()
-                    
-                    Group {
-                        FullscreenWallpaperView(wallpaper: selected)
-                            .matchedGeometryEffect(id: selected.id, in: animationNamespace)
-                            .transition(.identity)
-                            .opacity(selectedWallpaper == nil ? 0 : 1)
-                    }
-                    .gesture(
-                        DragGesture()
-                            .onEnded { value in
-                                if value.translation.height > 100 {
-                                    dismissSelectedWallpaper()
-                                }
-                            }
-                    )
-                    .onTapGesture {
-                        dismissSelectedWallpaper()
+                LazyVGrid(columns: columns, spacing: 20) {
+                    ForEach(viewModel.wallpapers) { wallpaper in
+                        wallpaperCard(for: wallpaper)
                     }
                 }
-                .zIndex(1)
+                .padding([.leading, .trailing])
+                .padding(.top, 100)
             }
 
             VStack(spacing: 0) {
                 HStack {
                     Button(action: {
-                        presentationMode.wrappedValue.dismiss()
+                        dismiss()
                     }) {
                         ZStack {
                             Circle()
@@ -135,24 +92,61 @@ struct CollectionDetailView: View {
                 WallpaperPreviewView(wallpapers: viewModel.wallpapers)
             }
         }
+        .navigationDestination(for: Wallpaper.self) { wallpaper in
+            fullscreenDestination(for: wallpaper)
+        }
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
     }
 
-    private var wallpaperAnimation: Animation? {
-        reduceMotion ? nil : .smooth(duration: 0.35)
-    }
-
-    private func select(_ wallpaper: Wallpaper) {
-        withAnimation(wallpaperAnimation) {
-            selectedWallpaper = wallpaper
+    @ViewBuilder
+    private func fullscreenDestination(for wallpaper: Wallpaper) -> some View {
+        if reduceMotion {
+            FullscreenWallpaperView(wallpaper: wallpaper, collectionName: collection.name)
+                .navigationTransition(.automatic)
+        } else {
+            FullscreenWallpaperView(wallpaper: wallpaper, collectionName: collection.name)
+                .navigationTransition(.zoom(sourceID: wallpaper.transitionID, in: wallpaperZoomNamespace))
         }
     }
 
-    private func dismissSelectedWallpaper() {
-        withAnimation(wallpaperAnimation) {
-            selectedWallpaper = nil
+    private func wallpaperCard(for wallpaper: Wallpaper) -> some View {
+        ZStack(alignment: .bottomTrailing) {
+            NavigationLink(value: wallpaper) {
+                WallpaperCardView(wallpaper: wallpaper, showFavoriteButton: false)
+            }
+            .buttonStyle(.plain)
+            .matchedTransitionSource(id: wallpaper.transitionID, in: wallpaperZoomNamespace) { source in
+                source
+                    .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+            }
+
+            favoriteButton(for: wallpaper)
+                .padding(.trailing, 15)
+                .padding(.bottom, 12)
         }
+    }
+
+    private func favoriteButton(for wallpaper: Wallpaper) -> some View {
+        Button {
+            let isNowFavorite = !favoritesManager.isFavorite(wallpaper: wallpaper)
+            favoritesManager.toggleFavorite(wallpaper: wallpaper)
+            animatingFavoriteWallpaperID = wallpaper.transitionID
+
+            if isNowFavorite {
+                let generator = UINotificationFeedbackGenerator()
+                generator.notificationOccurred(.success)
+            }
+        } label: {
+            Image(systemName: favoritesManager.isFavorite(wallpaper: wallpaper) ? "heart.fill" : "heart")
+                .resizable()
+                .frame(width: 14, height: 13)
+                .foregroundColor(favoritesManager.isFavorite(wallpaper: wallpaper) ? .red : .gray)
+                .symbolEffect(.bounce, value: animatingFavoriteWallpaperID)
+        }
+        .buttonStyle(.plain)
+        .frame(width: 32, height: 32)
+        .contentShape(Rectangle())
     }
 }
     #Preview {

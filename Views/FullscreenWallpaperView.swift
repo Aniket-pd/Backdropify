@@ -16,7 +16,7 @@ struct DownloadOption {
 
 struct FullscreenWallpaperView: View {
     let wallpaper: Wallpaper
-    @Environment(\.presentationMode) private var presentationMode
+    @Environment(\.dismiss) private var dismiss
     @State private var showInfoSheet = false
     var collectionName: String = "Abstract Art"
     @State private var showDownloadSheet = false
@@ -71,7 +71,7 @@ struct FullscreenWallpaperView: View {
 
     private var dismissButton: some View {
         Button(action: {
-            presentationMode.wrappedValue.dismiss()
+            dismiss()
         }) {
             Image(systemName: "arrow.backward")
                 .font(.system(size: 22, weight: .semibold))

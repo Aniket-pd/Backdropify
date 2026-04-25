@@ -2,6 +2,8 @@ import SwiftUI
 
 struct FavoritesView: View {
     @StateObject private var favoritesManager = FavoritesManager.shared
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Namespace private var wallpaperZoomNamespace
     
     // 2-column grid like CollectionDetailView
     private let columns = [
@@ -10,7 +12,7 @@ struct FavoritesView: View {
     ]
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ScrollView {
                 if favoritesManager.favorites.isEmpty {
                     VStack {
@@ -25,7 +27,14 @@ struct FavoritesView: View {
                 } else {
                     LazyVGrid(columns: columns, spacing: 20) {
                         ForEach(favoritesManager.favorites) { wallpaper in
-                            WallpaperCardView(wallpaper: wallpaper, showFavoriteButton: false)
+                            NavigationLink(value: wallpaper) {
+                                WallpaperCardView(wallpaper: wallpaper, showFavoriteButton: false)
+                            }
+                            .buttonStyle(.plain)
+                            .matchedTransitionSource(id: wallpaper.transitionID, in: wallpaperZoomNamespace) { source in
+                                source
+                                    .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                            }
                         }
                     }
                     .padding()
@@ -34,6 +43,15 @@ struct FavoritesView: View {
             .navigationTitle("Favorites")
             .navigationBarTitleDisplayMode(.inline)
             .background(Color.black.ignoresSafeArea())
+            .navigationDestination(for: Wallpaper.self) { wallpaper in
+                if reduceMotion {
+                    FullscreenWallpaperView(wallpaper: wallpaper, collectionName: "Favorites")
+                        .navigationTransition(.automatic)
+                } else {
+                    FullscreenWallpaperView(wallpaper: wallpaper, collectionName: "Favorites")
+                        .navigationTransition(.zoom(sourceID: wallpaper.transitionID, in: wallpaperZoomNamespace))
+                }
+            }
         }
     }
 }

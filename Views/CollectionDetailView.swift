@@ -35,51 +35,9 @@ struct CollectionDetailView: View {
                 .padding([.leading, .trailing])
                 .padding(.top, 100)
             }
-
-            VStack(spacing: 0) {
-                HStack {
-                    Button(action: {
-                        dismiss()
-                    }) {
-                        ZStack {
-                            Circle()
-                                .fill(Color(red: 36/255, green: 35/255, blue: 35/255))
-                                .frame(width: 36, height: 36)
-                            Image(systemName: "xmark")
-                                .foregroundColor(.white)
-                                .font(.system(size: 16, weight: .bold))
-                        }
-                    }
-                    .padding(.leading, 24)
-
-                    Text(collection.name)
-                        .font(.system(size: 21, weight: .semibold))
-                        .foregroundColor(.white)
-                        .padding(.leading, 12)
-
-                    Spacer()
-
-                    Button(action: {
-                        showFullScreenPreview = true
-                    }) {
-                        Image(systemName: "rectangle.stack.fill")
-                            .foregroundColor(.white)
-                    }
-                    .padding(.trailing, 24)
-                    
-                }
-                .frame(height: 70)
-                .padding(.top, 50)
-                .background(
-                    ZStack {
-                        Color.clear.background(.ultraThinMaterial)
-                        Color.black.opacity(0.75)
-                    }
-                )
-                .ignoresSafeArea(edges: .top)
-                .shadow(color: .black.opacity(0.5), radius: 10, x: 0, y: 4)
-                Spacer()
-            }
+        }
+        .overlay(alignment: .top) {
+            topBar
         }
         .onAppear {
             if ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] != "1" {
@@ -116,6 +74,7 @@ struct CollectionDetailView: View {
                 WallpaperCardView(wallpaper: wallpaper, showFavoriteButton: false)
             }
             .buttonStyle(.plain)
+            .contentShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
             .matchedTransitionSource(id: wallpaper.transitionID, in: wallpaperZoomNamespace) { source in
                 source
                     .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
@@ -147,6 +106,49 @@ struct CollectionDetailView: View {
         .buttonStyle(.plain)
         .frame(width: 32, height: 32)
         .contentShape(Rectangle())
+    }
+
+    private var topBar: some View {
+        HStack {
+            Button(action: {
+                dismiss()
+            }) {
+                ZStack {
+                    Circle()
+                        .fill(Color(red: 36/255, green: 35/255, blue: 35/255))
+                        .frame(width: 36, height: 36)
+                    Image(systemName: "xmark")
+                        .foregroundColor(.white)
+                        .font(.system(size: 16, weight: .bold))
+                }
+            }
+            .padding(.leading, 24)
+
+            Text(collection.name)
+                .font(.system(size: 21, weight: .semibold))
+                .foregroundColor(.white)
+                .padding(.leading, 12)
+
+            Spacer()
+
+            Button(action: {
+                showFullScreenPreview = true
+            }) {
+                Image(systemName: "rectangle.stack.fill")
+                    .foregroundColor(.white)
+            }
+            .padding(.trailing, 24)
+        }
+        .frame(height: 70)
+        .padding(.top, 50)
+        .background(
+            ZStack {
+                Color.clear.background(.ultraThinMaterial)
+                Color.black.opacity(0.75)
+            }
+        )
+        .ignoresSafeArea(edges: .top)
+        .shadow(color: .black.opacity(0.5), radius: 10, x: 0, y: 4)
     }
 }
     #Preview {

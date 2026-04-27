@@ -15,10 +15,9 @@ struct CollectionDetailView: View {
     }
     @StateObject private var favoritesManager = FavoritesManager.shared
     
-    // 1️⃣ Define the grid structure: 2 columns
+    // 1️⃣ Define the grid structure: adaptive columns with minimum width 160 and spacing 16
     private let columns = [
-        GridItem(.flexible()),
-        GridItem(.flexible())
+        GridItem(.adaptive(minimum: 160), spacing: 16)
     ]
     
     var body: some View {
@@ -27,7 +26,7 @@ struct CollectionDetailView: View {
                 .ignoresSafeArea()
             
             ScrollView {
-                LazyVGrid(columns: columns, spacing: 20) {
+                LazyVGrid(columns: columns, spacing: 16) {
                     ForEach(viewModel.wallpapers) { wallpaper in
                         wallpaperCard(for: wallpaper)
                     }
@@ -72,6 +71,8 @@ struct CollectionDetailView: View {
         ZStack(alignment: .bottomTrailing) {
             NavigationLink(value: wallpaper) {
                 WallpaperCardView(wallpaper: wallpaper, showFavoriteButton: false)
+                    .frame(maxWidth: .infinity)
+                    .aspectRatio(3/4, contentMode: .fit)
             }
             .buttonStyle(.plain)
             .contentShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
@@ -84,6 +85,7 @@ struct CollectionDetailView: View {
                 .padding(.trailing, 15)
                 .padding(.bottom, 12)
         }
+        .frame(maxWidth: .infinity)
     }
 
     private func favoriteButton(for wallpaper: Wallpaper) -> some View {

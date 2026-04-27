@@ -53,10 +53,11 @@ struct HomeView: View {
                         .padding(.leading, 21)
                         .padding(.top, 20)
 
-                    LazyVGrid(columns: [GridItem(.fixed(169), spacing: 12), GridItem(.fixed(169), spacing: 12)], spacing: 12) {
+                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 16)], spacing: 16) {
                         ForEach(collectionsVM.collections) { collection in
                             NavigationLink(value: collection) {
                                 collectionCard(collection)
+                                    .frame(maxWidth: .infinity)
                             }
                             .buttonStyle(.plain)
                             .matchedTransitionSource(id: collection.id, in: collectionZoomNamespace) { source in
@@ -97,33 +98,35 @@ struct HomeView: View {
                     image
                         .resizable()
                         .aspectRatio(contentMode: .fill)
-                        .contentTransition(.opacity)
 
                 case .failure(_):
                     Color.gray.opacity(0.3)
-                        .cornerRadius(14)
 
                 case .empty:
-                    RoundedRectangle(cornerRadius: 14)
-                        .fill(Color.gray.opacity(0.3))
+                    Color.gray.opacity(0.3)
                         .redacted(reason: .placeholder)
 
                 @unknown default:
                     EmptyView()
                 }
             }
-            .frame(width: 169, height: 118)
+            .frame(minWidth: 0, maxWidth: .infinity)
+            .frame(height: 160)
             .clipped()
-            .cornerRadius(14)
+
+            LinearGradient(
+                gradient: Gradient(colors: [.clear, .black.opacity(0.7)]),
+                startPoint: .center,
+                endPoint: .bottom
+            )
 
             Text(collection.name)
-                .font(.system(size: 18, weight: .bold))
+                .font(.system(size: 18, weight: .semibold))
                 .foregroundColor(.white)
-                .padding(.leading, 16)
-                .padding(.bottom, 15)
+                .padding()
         }
-        .frame(width: 169, height: 118)
-        .transition(.opacity)
+        .cornerRadius(15)
+        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
     }
 }
 

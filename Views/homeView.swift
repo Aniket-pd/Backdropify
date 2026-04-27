@@ -111,7 +111,7 @@ struct HomeView: View {
                 }
             }
             .frame(minWidth: 0, maxWidth: .infinity)
-            .frame(height: 160)
+            .frame(height: 140)
             .clipped()
 
             LinearGradient(

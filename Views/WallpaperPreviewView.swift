@@ -105,54 +105,28 @@ struct WallpaperPreviewView: View {
                         selectedWallpaper = wallpaper
                     } label: {
                         ZStack {
-                            // AsyncImage handles loading images from URLs asynchronously.
-                            AsyncImage(url: URL(string: wallpaper.url)) { phase in
-                                switch phase {
-                                case .empty:
-                                    ProgressView()
-                                        // Ensure ProgressView has a defined size to maintain layout consistency.
-                                        .frame(width: itemWidth, height: itemHeight)
-                                        .background(Color.gray.opacity(0.1)) // Subtle background for empty state
-                                case .success(let image):
-                                    image
-                                        .resizable()
-                                        // .aspectRatio(contentMode: .fill) is a good choice for wallpapers
-                                        // as it ensures the image covers the frame, cropping if necessary.
-                                        .aspectRatio(contentMode: .fill)
-                                        .onAppear {
-                                            // Useful for debugging image loading.
-                                            print("Successfully loaded wallpaper image: \(wallpaper.url)")
+                            OptimizedWallpaperImage(
+                                urlString: wallpaper.url,
+                                targetSize: CGSize(width: itemWidth, height: itemHeight),
+                                contentMode: .fill
+                            ) {
+                                ProgressView()
+                                    .frame(width: itemWidth, height: itemHeight)
+                                    .background(Color.gray.opacity(0.1))
+                            } failure: {
+                                Color.gray
+                                    .frame(width: itemWidth, height: itemHeight)
+                                    .overlay(
+                                        VStack {
+                                            Image(systemName: "photo")
+                                                .font(.largeTitle)
+                                            Text("Load Failed")
                                         }
-                                case .failure:
-                                    // Provides feedback to the user if an image fails to load.
-                                    Color.gray
-                                        .frame(width: itemWidth, height: itemHeight)
-                                        .overlay(
-                                            VStack {
-                                                Image(systemName: "photo")
-                                                    .font(.largeTitle)
-                                                Text("Load Failed")
-                                            }
-                                            .foregroundColor(.white)
-                                        )
-                                        .onAppear {
-                                            print("Failed to load wallpaper image: \(wallpaper.url)")
-                                        }
-                                @unknown default:
-                                    // Handles any future cases that might be added to AsyncImagePhase.
-                                    Color.black
-                                        .frame(width: itemWidth, height: itemHeight)
-                                        .overlay(Text("Unknown State").foregroundColor(.white))
-                                        .onAppear {
-                                            print("Unknown AsyncImage phase for wallpaper image: \(wallpaper.url)")
-                                        }
-                                }
+                                        .foregroundColor(.white)
+                                    )
                             }
-                            // This frame is applied to the AsyncImage content itself.
                             .frame(width: itemWidth, height: itemHeight)
-                            // Clips the image content to a rounded rectangle shape.
                             .clipShape(RoundedRectangle(cornerRadius: 20))
-                            // Adds a shadow for a depth effect, enhancing the visual hierarchy.
                             .shadow(color: .black.opacity(0.4), radius: 12, x: 0, y: 6)
                             .overlay(
                                 RadialGradient(
@@ -168,6 +142,7 @@ struct WallpaperPreviewView: View {
                                 .blendMode(.overlay)
                                 .clipShape(RoundedRectangle(cornerRadius: 20))
                             )
+                            .drawingGroup()
 
                             // Overlay mimicking iPhone lock screen
                             VStack {

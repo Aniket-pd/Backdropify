@@ -46,35 +46,25 @@ struct WallpaperCardView: View {
     }
 
     private var wallpaperImage: some View {
-        AsyncImage(url: URL(string: wallpaper.url)) { phase in
-            switch phase {
-            case .empty:
-                ProgressView()
-                    .frame(width: 166, height: 220)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(Color.gray.opacity(0.2))
-
-            case .success(let image):
-                image
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 166, height: 220)
-                    .clipped()
-
-            case .failure:
-                ZStack {
-                    Color.gray.opacity(0.25)
-                    Image(systemName: "photo")
-                        .font(.title2)
-                        .foregroundColor(.white.opacity(0.75))
-                }
+        OptimizedWallpaperImage(
+            targetSize: CGSize(width: 166, height: 220),
+            contentMode: .fill
+        ) {
+            ProgressView()
                 .frame(width: 166, height: 220)
-
-            @unknown default:
-                EmptyView()
-                    .frame(width: 166, height: 220)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Color.gray.opacity(0.2))
+        } failure: {
+            ZStack {
+                Color.gray.opacity(0.25)
+                Image(systemName: "photo")
+                    .font(.title2)
+                    .foregroundColor(.white.opacity(0.75))
             }
+            .frame(width: 166, height: 220)
         }
+        .frame(width: 166, height: 220)
+        .clipped()
         .cornerRadius(16)
     }
 }

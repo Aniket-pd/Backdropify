@@ -24,6 +24,7 @@ struct FullscreenWallpaperView: View {
 
     private let sheetCornerRadius: CGFloat = 24
     private let controlSize: CGFloat = 44
+    private let heroThumbnailSize = CGSize(width: 166, height: 220)
 
     var body: some View {
         ZStack {
@@ -143,21 +144,19 @@ struct FullscreenWallpaperView: View {
     }
 
     private var wallpaperBackground: some View {
-        AsyncImage(url: URL(string: wallpaper.url)) { phase in
-            switch phase {
-            case .empty:
-                ZStack {
-                    Color.black
-                    ProgressView()
-                        .tint(.white)
-                }
-            case .success(let image):
-                image
-                    .resizable()
-                    .scaledToFill()
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .contentShape(Rectangle())
-            case .failure:
+        GeometryReader { proxy in
+            OptimizedWallpaperImage(
+                urlString: wallpaper.url,
+                targetSize: proxy.size,
+                placeholderSize: heroThumbnailSize,
+                contentMode: .fill
+            ) {
+                Color.black
+                    .overlay {
+                        ProgressView()
+                            .tint(.white)
+                    }
+            } failure: {
                 ZStack {
                     Color.black
                     Image(systemName: "xmark.octagon")
@@ -166,10 +165,9 @@ struct FullscreenWallpaperView: View {
                         .frame(width: 100, height: 100)
                         .foregroundStyle(.red)
                 }
-            @unknown default:
-                Color.black
             }
         }
+        .contentShape(Rectangle())
     }
 
     private var closeButton: some View {

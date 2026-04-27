@@ -20,42 +20,30 @@ struct FullscreenWallpaperView: View {
     @State private var showInfoSheet = false
     var collectionName: String = "Abstract Art"
     @State private var showDownloadSheet = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private let sheetCornerRadius: CGFloat = 24
+    private let controlSize: CGFloat = 44
 
     var body: some View {
         ZStack {
             wallpaperBackground
         }
         .ignoresSafeArea()
+        .overlay(alignment: .topLeading) {
+            closeButton
+        }
+        .safeAreaInset(edge: .bottom) {
+            bottomControls
+        }
         .sheet(isPresented: $showInfoSheet) {
             infoSheet
         }
         .sheet(isPresented: $showDownloadSheet) {
             downloadSheet
         }
-        .toolbar {
-            ToolbarItemGroup(placement: .bottomBar) {
-                Button(action: {
-                    showInfoSheet = true
-                }) {
-                    Image(systemName: "info.circle")
-                }
-
-                Button(action: {
-                    showDownloadSheet = true
-                }) {
-                    Image(systemName: "arrow.down.circle")
-                }
-
-                Button(action: {
-                    print("View button pressed")
-                }) {
-                    Image(systemName: "eye.circle")
-                }
-            }
-        }
         .toolbar(.hidden, for: .tabBar)
+        .toolbar(.hidden, for: .navigationBar)
         .navigationBarBackButtonHidden(true)
     }
 
@@ -158,22 +146,97 @@ struct FullscreenWallpaperView: View {
         AsyncImage(url: URL(string: wallpaper.url)) { phase in
             switch phase {
             case .empty:
-                ProgressView()
+                ZStack {
+                    Color.black
+                    ProgressView()
+                        .tint(.white)
+                }
             case .success(let image):
                 image
                     .resizable()
                     .scaledToFill()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .contentShape(Rectangle())
             case .failure:
-                Image(systemName: "xmark.octagon")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 100, height: 100)
-                    .foregroundColor(.red)
+                ZStack {
+                    Color.black
+                    Image(systemName: "xmark.octagon")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 100, height: 100)
+                        .foregroundStyle(.red)
+                }
             @unknown default:
-                EmptyView()
+                Color.black
             }
         }
+    }
+
+    private var closeButton: some View {
+        Button(action: dismiss.callAsFunction) {
+            Image(systemName: "xmark")
+                .font(.system(size: 16, weight: .semibold))
+                .frame(width: controlSize, height: controlSize)
+                .foregroundStyle(.white)
+                .liquidGlassSurface(
+                    interactive: true,
+                    shape: RoundedRectangle(cornerRadius: 16, style: .continuous)
+                )
+        }
+        .buttonStyle(.plain)
+        .padding(.leading, 20)
+        .padding(.top, 14)
+        .accessibilityLabel("Close wallpaper")
+    }
+
+    private var bottomControls: some View {
+        HStack(spacing: 14) {
+            controlButton(
+                systemName: "info.circle",
+                label: "Wallpaper information",
+                action: { showInfoSheet = true }
+            )
+
+            controlButton(
+                systemName: "arrow.down.circle",
+                label: "Download wallpaper",
+                action: { showDownloadSheet = true }
+            )
+
+            controlButton(
+                systemName: "eye.circle",
+                label: "Preview wallpaper",
+                action: { print("View button pressed") }
+            )
+        }
+        .padding(.horizontal, 20)
+        .padding(.top, 12)
+        .padding(.bottom, 8)
+        .frame(maxWidth: .infinity)
+        .background(alignment: .bottom) {
+            LinearGradient(
+                colors: [Color.black.opacity(0), Color.black.opacity(reduceMotion ? 0.55 : 0.72)],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .ignoresSafeArea()
+        }
+    }
+
+    private func controlButton(systemName: String, label: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Image(systemName: systemName)
+                .font(.system(size: 22, weight: .medium))
+                .frame(maxWidth: .infinity)
+                .frame(height: 54)
+                .foregroundStyle(.white)
+                .liquidGlassSurface(
+                    interactive: true,
+                    shape: RoundedRectangle(cornerRadius: 18, style: .continuous)
+                )
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(label)
     }
 
     private func downloadOptionsList(downloadOptions: [DownloadOption]) -> some View {

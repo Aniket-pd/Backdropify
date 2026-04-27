@@ -28,7 +28,11 @@ struct FavoritesView: View {
                     LazyVGrid(columns: columns, spacing: 20) {
                         ForEach(favoritesManager.favorites) { wallpaper in
                             NavigationLink(value: wallpaper) {
-                                WallpaperCardView(wallpaper: wallpaper, showFavoriteButton: false)
+                                WallpaperCardView(
+                                    wallpaper: wallpaper,
+                                    showFavoriteButton: false,
+                                    showsBottomBar: false
+                                )
                             }
                             .buttonStyle(.plain)
                             .matchedTransitionSource(id: wallpaper.transitionID, in: wallpaperZoomNamespace) { source in

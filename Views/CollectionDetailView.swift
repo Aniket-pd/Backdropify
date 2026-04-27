@@ -70,7 +70,11 @@ struct CollectionDetailView: View {
     private func wallpaperCard(for wallpaper: Wallpaper) -> some View {
         ZStack(alignment: .bottomTrailing) {
             NavigationLink(value: wallpaper) {
-                WallpaperCardView(wallpaper: wallpaper, showFavoriteButton: false)
+                WallpaperCardView(
+                    wallpaper: wallpaper,
+                    showFavoriteButton: false,
+                    showsBottomBar: false
+                )
                     .frame(maxWidth: .infinity)
                     .aspectRatio(3/4, contentMode: .fit)
             }
@@ -162,7 +166,27 @@ struct CollectionDetailView: View {
 
     let dummyWallpapers = [
         Wallpaper(id: "1", name: "ap", url: "https://res.cloudinary.com/dxmwaa0nv/image/upload/v1745576498/illustrationatmosphericimag_71073153_iuoaql.png"),
-        Wallpaper(id: "2", name: "ogo", url: "https://picsum.photos/200/301")
+        Wallpaper(id: "2", name: "ogo", url: "https://picsum.photos/200/301"),
+        Wallpaper(id: "3", name: "wall3", url: "https://picsum.photos/200/302"),
+        Wallpaper(id: "4", name: "wall4", url: "https://picsum.photos/200/303"),
+        Wallpaper(id: "5", name: "wall5", url: "https://picsum.photos/200/304"),
+        Wallpaper(id: "6", name: "wall6", url: "https://picsum.photos/200/305"),
+        Wallpaper(id: "7", name: "wall7", url: "https://picsum.photos/200/306"),
+        Wallpaper(id: "8", name: "wall8", url: "https://picsum.photos/200/307"),
+        Wallpaper(id: "9", name: "wall9", url: "https://picsum.photos/200/308"),
+        Wallpaper(id: "10", name: "wall10", url: "https://picsum.photos/200/309"),
+        Wallpaper(id: "11", name: "wall11", url: "https://picsum.photos/200/310"),
+        Wallpaper(id: "12", name: "wall12", url: "https://picsum.photos/200/311"),
+        Wallpaper(id: "13", name: "wall13", url: "https://picsum.photos/200/312"),
+        Wallpaper(id: "14", name: "wall14", url: "https://picsum.photos/200/313"),
+        Wallpaper(id: "15", name: "wall15", url: "https://picsum.photos/200/314"),
+        Wallpaper(id: "16", name: "wall16", url: "https://picsum.photos/200/315"),
+        Wallpaper(id: "17", name: "wall17", url: "https://picsum.photos/200/316"),
+        Wallpaper(id: "18", name: "wall18", url: "https://picsum.photos/200/317"),
+        Wallpaper(id: "19", name: "wall19", url: "https://picsum.photos/200/318"),
+        Wallpaper(id: "20", name: "wall20", url: "https://picsum.photos/200/319"),
+        Wallpaper(id: "21", name: "wall21", url: "https://picsum.photos/200/320"),
+        Wallpaper(id: "22", name: "wall22", url: "https://picsum.photos/200/321")
     ]
 
     let viewModel = WallpapersByCollectionViewModel()

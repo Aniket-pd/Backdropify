@@ -3,6 +3,7 @@ import SwiftUI
 struct WallpaperCardView: View {
     let wallpaper: Wallpaper
     var showFavoriteButton: Bool = true
+    var showsBottomBar: Bool = true
     @ObservedObject private var favoritesManager = FavoritesManager.shared
     @State private var animateHeart = false
 
@@ -10,35 +11,36 @@ struct WallpaperCardView: View {
         ZStack(alignment: .bottom) {
             wallpaperImage
 
-            // Bottom Label Overlay
-            Rectangle()
-                .fill(Color.black.opacity(0.5))
-                .frame(width: 166, height: 40)
-                .overlay(
-                    HStack {
-                        Spacer()
+            if showsBottomBar {
+                Rectangle()
+                    .fill(Color.black.opacity(0.5))
+                    .frame(width: 166, height: 40)
+                    .overlay(
+                        HStack {
+                            Spacer()
 
-                        if showFavoriteButton {
-                            Button(action: {
-                                let isNowFavorite = !favoritesManager.isFavorite(wallpaper: wallpaper)
-                                favoritesManager.toggleFavorite(wallpaper: wallpaper)
-                                animateHeart.toggle()
-                                if isNowFavorite {
-                                    let generator = UINotificationFeedbackGenerator()
-                                    generator.notificationOccurred(.success)
+                            if showFavoriteButton {
+                                Button(action: {
+                                    let isNowFavorite = !favoritesManager.isFavorite(wallpaper: wallpaper)
+                                    favoritesManager.toggleFavorite(wallpaper: wallpaper)
+                                    animateHeart.toggle()
+                                    if isNowFavorite {
+                                        let generator = UINotificationFeedbackGenerator()
+                                        generator.notificationOccurred(.success)
+                                    }
+                                }) {
+                                    Image(systemName: favoritesManager.isFavorite(wallpaper: wallpaper) ? "heart.fill" : "heart")
+                                        .resizable()
+                                        .frame(width: 14, height: 13)
+                                        .foregroundStyle(favoritesManager.isFavorite(wallpaper: wallpaper) ? .red : .gray)
+                                        .symbolEffect(.bounce, value: animateHeart)
                                 }
-                            }) {
-                                Image(systemName: favoritesManager.isFavorite(wallpaper: wallpaper) ? "heart.fill" : "heart")
-                                    .resizable()
-                                    .frame(width: 14, height: 13)
-                                    .foregroundColor(favoritesManager.isFavorite(wallpaper: wallpaper) ? .red : .gray)
-                                    .symbolEffect(.bounce, value: animateHeart)
+                                .padding(.trailing, 15)
                             }
-                            .padding(.trailing, 15)
                         }
-                    }
-                )
-                .cornerRadius(16, corners: [.bottomLeft, .bottomRight])
+                    )
+                    .cornerRadius(16, corners: [.bottomLeft, .bottomRight])
+            }
         }
         .frame(width: 166, height: 220)
     }
